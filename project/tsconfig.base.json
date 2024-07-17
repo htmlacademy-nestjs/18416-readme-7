@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/helpers": ["libs/shared/helpers/src/index.ts"],
       "@project/shared/core": ["libs/shared/core/src/index.ts"]
     }
   },
