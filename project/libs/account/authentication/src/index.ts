@@ -1,1 +1,1 @@
-export * from './lib/authentication';
+export * from './authentication.module';
