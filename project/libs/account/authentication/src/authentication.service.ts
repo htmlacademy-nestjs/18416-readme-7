@@ -20,9 +20,8 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class AuthenticationService {
   constructor(private readonly blogUserRepository: BlogUserRepository) {}
 
-  public async register(dto: CreateUserDto) {
-    const { email, userName, registerDate, userPassword, passwordHash, role } =
-      dto;
+  public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
+    const { email, userName, registerDate, userPassword } = dto;
 
     const blogUser = {
       email,
@@ -44,7 +43,9 @@ export class AuthenticationService {
       userPassword
     );
 
-    return this.blogUserRepository.save(userEntity);
+    this.blogUserRepository.save(userEntity);
+
+    return userEntity;
   }
 
   public async verifyUser(dto: LoginUserDto) {
