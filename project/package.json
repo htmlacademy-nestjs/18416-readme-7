@@ -8,7 +8,12 @@
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/swagger": "^7.4.0",
+    "aws-sdk": "^2.1659.0",
     "axios": "^1.6.0",
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.5.4",
+    "node-gyp": "^10.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0"

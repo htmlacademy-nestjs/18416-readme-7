@@ -10,12 +10,10 @@ import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
 import { UserRole } from '@project/shared/core';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import {
-  AUTH_USER_EXISTS,
-  AUTH_USER_NOT_FOUND,
-  AUTH_USER_PASSWORD_WRONG,
-} from './authentication.constant';
+
 import { LoginUserDto } from './dto/login-user.dto';
+
+import { AuthenticationResponseStatuses } from './authentication.enum';
 @Injectable()
 export class AuthenticationService {
   constructor(private readonly blogUserRepository: BlogUserRepository) {}
@@ -36,7 +34,9 @@ export class AuthenticationService {
     const existUser = await this.blogUserRepository.findByEmail(email);
 
     if (existUser) {
-      throw new ConflictException(AUTH_USER_EXISTS);
+      throw new ConflictException(
+        AuthenticationResponseStatuses.RESPONSE_USER_EXIST
+      );
     }
 
     const userEntity = await new BlogUserEntity(blogUser).setPassword(
@@ -53,11 +53,15 @@ export class AuthenticationService {
     const existUser = await this.blogUserRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new NotFoundException(AUTH_USER_NOT_FOUND);
+      throw new NotFoundException(
+        AuthenticationResponseStatuses.RESPONSE_USER_NOT_FOUND
+      );
     }
 
     if (!(await existUser.comparePassword(password))) {
-      throw new UnauthorizedException(AUTH_USER_PASSWORD_WRONG);
+      throw new UnauthorizedException(
+        AuthenticationResponseStatuses.RESPONSE_WRONG_PASSWORD
+      );
     }
 
     return existUser;
@@ -67,7 +71,9 @@ export class AuthenticationService {
     const user = await this.blogUserRepository.findById(id);
 
     if (!user) {
-      throw new NotFoundException(AUTH_USER_NOT_FOUND);
+      throw new NotFoundException(
+        AuthenticationResponseStatuses.RESPONSE_USER_NOT_FOUND
+      );
     }
 
     return user;
