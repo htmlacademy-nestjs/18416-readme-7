@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@nestjs/swagger": "^7.4.0",
+    "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "dayjs": "^1.11.12"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2"
+  }
+}
