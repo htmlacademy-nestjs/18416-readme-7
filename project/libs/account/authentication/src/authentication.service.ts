@@ -26,10 +26,7 @@ export class AuthenticationService {
 
     @Inject(dbConfig.KEY)
     private readonly databaseConfig: ConfigType<typeof dbConfig>
-  ) {
-    console.log(databaseConfig.host);
-    console.log(databaseConfig.port);
-  }
+  ) {}
 
   public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
     const { email, userName, registerDate, userPassword } = dto;
