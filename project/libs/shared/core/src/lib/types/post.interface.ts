@@ -10,7 +10,7 @@ export interface VideoPost extends Entity {
   videoLink: string;
   userId: string;
   type: PostType.VIDEO;
-  creationDate: Date;
+  createdAt: Date;
   publicationDate: Date;
   publicationStatus: PostStatus;
   publicationRepostNumber: number;
@@ -28,7 +28,7 @@ export interface TextPost extends Entity {
   postText: string;
   userId: string;
   type: PostType.TEXT;
-  creationDate: Date;
+  createdAt: Date;
   publicationDate: Date;
   publicationStatus: PostStatus;
   publicationRepostNumber: number;
@@ -41,11 +41,11 @@ export interface TextPost extends Entity {
 export interface QuotePost extends Entity {
   id: string;
   originalPublicationId: string;
-  postText: string;
-  postAuthor: string;
+  quoteText: string;
+  quoteAuthor: string;
   userId: string;
   type: PostType.QUOTE;
-  creationDate: Date;
+  createdAt: Date;
   publicationDate: Date;
   publicationStatus: PostStatus;
   publicationRepostNumber: number;
@@ -61,7 +61,7 @@ export interface PhotoPost extends Entity {
   photo: Blob;
   userId: string;
   type: PostType.PHOTO;
-  creationDate: Date;
+  createdAt: Date;
   publicationDate: Date;
   publicationStatus: PostStatus;
   publicationRepostNumber: number;
@@ -78,7 +78,7 @@ export interface LinkPost extends Entity {
   linkUrl: string;
   userId: string;
   type: PostType.LINK;
-  creationDate: Date;
+  createdAt: Date;
   publicationDate: Date;
   publicationStatus: PostStatus;
   publicationRepostNumber: number;

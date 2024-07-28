@@ -1,9 +1,10 @@
 import { Entity } from '../base/entity';
 
-export interface Comment extends Entity {
+export interface Like extends Entity {
   id: string;
-  text: string;
+  post: string;
   postId: string;
   userId: string;
   createdAt: Date;
+  updatedAt: Date;
 }
