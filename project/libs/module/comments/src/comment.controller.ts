@@ -36,8 +36,8 @@ export class CommentController {
 
   @Post('/')
   public async create(@Body() dto: CreateCommentDto) {
-    const newCategory = await this.commentService.createComment(dto);
-    return fillDto(CommentRdo, newCategory.toPOJO());
+    const newComment = await this.commentService.createComment(dto);
+    return fillDto(CommentRdo, newComment.toPOJO());
   }
 
   @Delete('/:id')
