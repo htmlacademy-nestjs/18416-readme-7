@@ -40,15 +40,6 @@ export class CommentController {
     return fillDto(CommentRdo, newCategory.toPOJO());
   }
 
-  //   @Post('/')
-  //   public async create(
-  //     @Param('postId') postId: string,
-  //     @Body() dto: CreateCommentDto
-  //   ) {
-  //     const newComment = await this.commentService.createComment(postId, dto);
-  //     return fillDto(CommentRdo, newComment.toPOJO());
-  //   }
-
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async destroy(@Param('id') id: string) {
