@@ -1,89 +1,30 @@
 import { Entity } from '../base/entity';
-import { PostStatus } from './post-status.enum';
-import { PostType } from './post-type.enum';
+import { Like } from './like.interface';
+import { PostStatus } from './enums/post-status.enum';
+import { PostType } from './enums/post-type.enum';
 import { Tag } from './tag.interface';
+import { Comment } from './comment.interface';
 
-export interface VideoPost extends Entity {
+export interface Post extends Entity {
   id: string;
   originalPublicationId: string;
   name: string;
   videoLink: string;
   userId: string;
-  type: PostType.VIDEO;
-  creationDate: Date;
-  publicationDate: Date;
+  type: PostType;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
   publicationStatus: PostStatus;
-  publicationRepostNumber: number;
   isPublicationReposted: boolean;
-  likesCount: number;
-  commentsCount: number;
-  tagsList?: Tag[];
-}
-
-export interface TextPost extends Entity {
-  id: string;
-  originalPublicationId: string;
-  name: string;
+  publicationRepostNumber: number;
   postAnons: string;
-  postText: string;
-  userId: string;
-  type: PostType.TEXT;
-  creationDate: Date;
-  publicationDate: Date;
-  publicationStatus: PostStatus;
-  publicationRepostNumber: number;
-  isPublicationReposted: boolean;
-  likesCount: number;
-  commentsCount: number;
-  tagsList?: Tag[];
-}
-
-export interface QuotePost extends Entity {
-  id: string;
-  originalPublicationId: string;
-  postText: string;
-  postAuthor: string;
-  userId: string;
-  type: PostType.QUOTE;
-  creationDate: Date;
-  publicationDate: Date;
-  publicationStatus: PostStatus;
-  publicationRepostNumber: number;
-  isPublicationReposted: boolean;
-  likesCount: number;
-  commentsCount: number;
-  tagsList?: Tag[];
-}
-
-export interface PhotoPost extends Entity {
-  id: string;
-  originalPublicationId: string;
-  photo: Blob;
-  userId: string;
-  type: PostType.PHOTO;
-  creationDate: Date;
-  publicationDate: Date;
-  publicationStatus: PostStatus;
-  publicationRepostNumber: number;
-  isPublicationReposted: boolean;
-  likesCount: number;
-  commentsCount: number;
-  tagsList?: Tag[];
-}
-
-export interface LinkPost extends Entity {
-  id: string;
-  originalPublicationId: string;
+  quoteText: string;
+  quoteAuthor: string;
+  photo: string;
   linkDescription: string;
   linkUrl: string;
-  userId: string;
-  type: PostType.LINK;
-  creationDate: Date;
-  publicationDate: Date;
-  publicationStatus: PostStatus;
-  publicationRepostNumber: number;
-  isPublicationReposted: boolean;
-  likesCount: number;
-  commentsCount: number;
-  tagsList?: Tag[];
+  tags: Tag[];
+  likes: Like[];
+  comments: Comment[];
 }
