@@ -1,19 +1,5 @@
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-
-/*
-model Comment {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  postId    String   @map("post_id")
-  text      String
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("comments")
-}
-*/
-
 export class CommentRdo {
   @ApiProperty({
     description: 'user id',
