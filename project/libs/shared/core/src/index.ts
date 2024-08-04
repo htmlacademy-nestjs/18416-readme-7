@@ -12,3 +12,6 @@ export { Like } from './lib/types/like.interface';
 
 export { StorableEntity } from './lib/entities/storable-entity.interface';
 export { EntityFactory } from './lib/entities/entity-factory.interface';
+
+export { SortDirection } from './lib/types/sort-direction.interface';
+export { PaginationResult } from './lib/types/pagination.interface';
