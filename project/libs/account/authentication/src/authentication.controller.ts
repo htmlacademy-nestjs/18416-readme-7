@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -72,5 +80,9 @@ export class AuthenticationController {
   public async show(@Param('id') id: string) {
     const existUser = await this.authService.getUser(id);
     return existUser.toPOJO();
+  }
+  @Get('/demo/:id')
+  public async demoPipe(@Param('id') id: number) {
+    console.log(typeof id);
   }
 }
