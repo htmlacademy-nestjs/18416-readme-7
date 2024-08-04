@@ -1,8 +1,7 @@
-import { Entity } from '../base/entity';
 import { UserRole } from './enums/user-role.enum';
 
-export interface User extends Entity {
-  id: string;
+export interface User {
+  id?: string;
   email: string;
   userName: string;
   registerDate: Date;
