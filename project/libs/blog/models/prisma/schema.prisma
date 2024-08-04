@@ -30,7 +30,7 @@ enum PostStatusType {
 model Post {
   id                      String         @id @default(uuid())
   originalPublicationId   String?
-  name                    String?
+  postTitle               String?        @map("title")
   videoLink               String?
   userId                  String         @map("user_id")
   type                    PostType
@@ -43,6 +43,7 @@ model Post {
   comments                Comment[]
   likes                   Like[]
   postAnons               String?
+  postText                String?
   quoteText               String?
   quoteAuthor             String?
   photo                   String?
@@ -50,7 +51,7 @@ model Post {
   linkUrl                 String?
   tags                    String[]
 
-  @@index([name])
+  @@index([postTitle])
   @@map("posts")
 }
 

@@ -33,7 +33,7 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   @IsString()
-  public name: string;
+  public postTitle: string;
 
   @ApiProperty({
     description: 'Post tags',
@@ -84,6 +84,10 @@ export class CreatePostDto {
   @IsOptional()
   @IsString()
   public postAnons?: string;
+
+  @IsOptional()
+  @IsString()
+  public postText?: string;
 
   @IsOptional()
   @IsString()

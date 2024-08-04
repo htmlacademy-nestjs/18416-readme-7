@@ -87,6 +87,10 @@ export class UpdatePostDto {
 
   @IsOptional()
   @IsString()
+  public postText?: string;
+
+  @IsOptional()
+  @IsString()
   public quoteText?: string;
 
   @IsOptional()
