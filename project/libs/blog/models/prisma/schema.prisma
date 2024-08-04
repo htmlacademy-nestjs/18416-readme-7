@@ -40,8 +40,8 @@ model Post {
   publicationStatus       PostStatusType
   isPublicationReposted   Boolean        @default(false)
   publicationRepostNumber Int
-  comments                Comment[]?
-  likes                   Like[]?
+  comments                Comment[]
+  likes                   Like[]
   postAnons               String?
   quoteText               String?
   quoteAuthor             String?
