@@ -2,7 +2,12 @@
   "name": "@project/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "mongodb:start": "docker compose --file \"./apps/account/docker-compose.dev.yml\" --env-file \"./apps/account/account.env\" --project-name \"readme-users\" up -d",
+    "mongodb:stop": "docker compose --file \"./apps/account/docker-compose.dev.yml\" --env-file \"./apps/account/account.env\" --project-name \"readme-users\" down",
+    "postgres:start": "docker compose --file \"./apps/blog/docker-compose.dev.yml\" --env-file \"./apps/blog/blog.env\" --project-name \"readme-blog\" up -d",
+    "postgres:stop": "docker compose --file \"./apps/blog/docker-compose.dev.yml\"  --env-file \"./apps/blog/blog.env\" --project-name \"readme-blog\" down"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^10.0.2",
