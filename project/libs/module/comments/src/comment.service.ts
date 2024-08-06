@@ -18,8 +18,11 @@ export class CommentService {
     return this.commentRepository.findById(id);
   }
 
-  public async createComment(dto: CreateCommentDto): Promise<CommentEntity> {
-    const newComment = new CommentEntity(dto);
+  public async createComment(
+    postId: string,
+    dto: CreateCommentDto
+  ): Promise<CommentEntity> {
+    const newComment = new CommentEntity(postId, dto);
     await this.commentRepository.save(newComment);
 
     return newComment;

@@ -19,20 +19,21 @@ import { PostQuery } from './post.query';
 import { PostWithPaginationRdo } from './rdo/post-with-pagination.rdo';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { CommentRdo, CreateCommentDto } from '@project/comments';
 
 @Controller('posts')
 export class PostController {
-  constructor(private readonly blogPostService: PostService) {}
+  constructor(private readonly postService: PostService) {}
 
   @Get('/:id')
   public async show(@Param('id') id: string) {
-    const post = await this.blogPostService.getPost(id);
+    const post = await this.postService.getPost(id);
     return fillDto(PostRdo, post.toPOJO());
   }
 
   @Get('/')
   public async index(@Query() query: PostQuery) {
-    const postsWithPagination = await this.blogPostService.getAllPosts(query);
+    const postsWithPagination = await this.postService.getAllPosts(query);
     const result = {
       ...postsWithPagination,
       entities: postsWithPagination.entities.map((post) => post.toPOJO()),
@@ -42,19 +43,28 @@ export class PostController {
 
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
-    const newPost = await this.blogPostService.createPost(dto);
+    const newPost = await this.postService.createPost(dto);
     return fillDto(PostRdo, newPost.toPOJO());
   }
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async destroy(@Param('id') id: string) {
-    await this.blogPostService.deletePost(id);
+    await this.postService.deletePost(id);
   }
 
   @Patch('/:id')
   public async update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
-    const updatedPost = await this.blogPostService.updatePost(id, dto);
+    const updatedPost = await this.postService.updatePost(id, dto);
     return fillDto(PostRdo, updatedPost.toPOJO());
+  }
+
+  @Post('/:postId/comments')
+  public async createComment(
+    @Param('postId') postId: string,
+    @Body() dto: CreateCommentDto
+  ) {
+    const newComment = await this.postService.addComment(postId, dto);
+    return fillDto(CommentRdo, newComment.toPOJO());
   }
 }

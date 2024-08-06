@@ -3,10 +3,10 @@ import { StorableEntity, Comment } from '@project/shared/core';
 
 export class CommentEntity extends Entity implements StorableEntity<Comment> {
   public text: string;
-  public postId: string;
+  public postId?: string;
   public userId: string;
-  public createdAt: Date;
-  public updatedAt: Date;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 
   constructor(comment?: Comment) {
     super();
