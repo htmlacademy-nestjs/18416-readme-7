@@ -5,6 +5,7 @@ import { BlogUserModule } from '@project/blog-user';
 import { ConfigService } from '@nestjs/config';
 import { getJwtOptions } from '@project/account-config';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 
 @Module({
   imports: [
