@@ -46,7 +46,7 @@ export class AuthenticationService {
       email,
       userName,
       registerDate: dayjs(registerDate).toDate(),
-      userPassword: '',
+      userPassword,
       passwordHash: '',
       role: UserRole.USER,
       avatar: '',
