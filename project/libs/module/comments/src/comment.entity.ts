@@ -13,7 +13,7 @@ export class CommentEntity extends Entity implements StorableEntity<Comment> {
     this.populate(comment);
   }
 
-  public populate(comment?: Comment) {
+  public populate(comment?: Comment): void {
     if (!comment) {
       return;
     }

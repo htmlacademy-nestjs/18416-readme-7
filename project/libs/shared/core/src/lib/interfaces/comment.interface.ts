@@ -5,5 +5,5 @@ export interface Comment {
   userId: string;
   createdAt: Date;
   updatedAt?: Date;
-  toPOJO: any;
+  toPOJO?: any;
 }

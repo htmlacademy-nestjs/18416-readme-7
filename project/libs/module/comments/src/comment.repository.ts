@@ -27,6 +27,15 @@ export class CommentRepository extends BasePostgresRepository<
     entity.id = record.id;
   }
 
+  public async createComment(entity: CommentEntity): Promise<CommentEntity> {
+    const record = await this.client.comment.create({
+      data: { ...entity.toPOJO() },
+    });
+
+    entity.id = record.id;
+    return entity;
+  }
+
   public async findById(id: string): Promise<CommentEntity> {
     const comment = await this.client.comment.findFirst({
       where: {

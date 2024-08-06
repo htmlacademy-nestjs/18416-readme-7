@@ -26,7 +26,7 @@
       "@project/helpers": ["libs/shared/helpers/src/index.ts"],
       "@project/pipes": ["libs/shared/pipes/src/index.ts"],
       "@project/shared/core": ["libs/shared/core/src/index.ts"],
-      "@project/shared/enums": ["libs/shared/core/src/lib/types/enums/"]
+      "@project/shared/enums": ["libs/shared/core/src/lib/enums/"]
     }
   },
   "exclude": ["node_modules", "tmp"]

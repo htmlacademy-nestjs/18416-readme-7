@@ -9,10 +9,14 @@ import { CommentEntity } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from '@project/shared/core';
+import { CommentFactory } from './comment.factory';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly commentRepository: CommentRepository) {}
+  constructor(
+    private readonly commentRepository: CommentRepository,
+    public readonly commentFactory: CommentFactory
+  ) {}
 
   public async getCommentById(id: string): Promise<CommentEntity> {
     return this.commentRepository.findById(id);
@@ -22,10 +26,10 @@ export class CommentService {
     postId: string,
     dto: CreateCommentDto
   ): Promise<CommentEntity> {
-    const newComment = new CommentEntity(postId, dto);
-    await this.commentRepository.save(newComment);
+    const commentEntity = this.commentFactory.create({ postId, ...dto });
+    const comment = await this.commentRepository.createComment(commentEntity);
 
-    return newComment;
+    return comment;
   }
 
   public async getComments(postId: string): Promise<CommentEntity[]> {
