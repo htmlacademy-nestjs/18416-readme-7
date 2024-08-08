@@ -13,4 +13,4 @@ import { CommentModule } from '@project/comments';
   providers: [PostService, PostRepository, PostFactory],
   exports: [PostService],
 })
-export class BlogPostModule {}
+export class PostModule {}

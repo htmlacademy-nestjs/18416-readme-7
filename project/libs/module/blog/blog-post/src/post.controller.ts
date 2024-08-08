@@ -43,6 +43,7 @@ export class PostController {
 
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
+    console.log(dto);
     const newPost = await this.postService.createPost(dto);
     return fillDto(PostRdo, newPost.toPOJO());
   }

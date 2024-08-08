@@ -25,7 +25,7 @@ export interface Post extends Entity {
   photo: string;
   linkDescription: string;
   linkUrl: string;
-  tags: Tag[];
-  likes: Like[];
+  tags: string[];
+  likes: string[];
   comments: Comment[];
 }

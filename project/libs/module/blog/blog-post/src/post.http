@@ -22,8 +22,8 @@ Content-Type: application/json
   "postTitle": "Test post",
   "type": "Text",
   "postStatus": "Status",
-  "postContent": "Some content",
-  "userId": "658ede7600f80970fcf9e111",
+  "postText": "Some content",
+  "userId": "344234dsfsdfdsfwerwer"
 }
 
 ###

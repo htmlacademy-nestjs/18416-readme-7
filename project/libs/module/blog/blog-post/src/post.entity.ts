@@ -1,12 +1,5 @@
-import { CommentEntity, CommentFactory } from '@project/comments';
-import {
-  Entity,
-  Like,
-  Post,
-  StorableEntity,
-  Tag,
-  Comment,
-} from '@project/shared/core';
+import { CommentFactory } from '@project/comments';
+import { Entity, Post, StorableEntity, Comment } from '@project/shared/core';
 import { PostType, PostStatus } from '@project/shared/enums';
 
 export class PostEntity extends Entity implements StorableEntity<Post> {
@@ -28,8 +21,8 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
   public photo: string;
   public linkDescription: string;
   public linkUrl: string;
-  public tags: Tag[];
-  public likes: Like[];
+  public tags: string[];
+  public likes?: string[];
   public comments: Comment[];
 
   constructor(post?: Post) {

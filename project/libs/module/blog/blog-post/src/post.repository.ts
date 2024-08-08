@@ -66,7 +66,8 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     return this.createEntityFromDocument({
       ...document,
       type: document.type as PostType,
-      status: document.status as PostStatus,
+      publicationStatus: document.publicationStatus as PostStatus,
+      likes: [],
     });
   }
 
@@ -75,11 +76,10 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     await this.client.post.update({
       where: { id: entity.id },
       data: {
-        title: pojoEntity.postTitle,
+        postTitle: pojoEntity.postTitle,
         type: pojoEntity.type,
-        status: pojoEntity.publicationStatus,
+        publicationStatus: pojoEntity.publicationStatus,
         tags: pojoEntity.tags,
-        likes: pojoEntity.likes,
       },
       include: {
         comments: true,

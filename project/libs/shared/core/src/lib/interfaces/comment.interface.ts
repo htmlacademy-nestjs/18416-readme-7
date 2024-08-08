@@ -1,9 +1,9 @@
 export interface Comment {
   id: string;
   text: string;
-  postId: string;
+  postId?: string;
   userId: string;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   toPOJO?: any;
 }
