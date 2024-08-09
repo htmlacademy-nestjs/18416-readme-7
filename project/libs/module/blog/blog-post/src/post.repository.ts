@@ -35,6 +35,9 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
         comments: {
           connect: [],
         },
+        likes: {
+          connect: [],
+        },
       },
     });
 
@@ -56,6 +59,7 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       },
       include: {
         comments: true,
+        likes: true,
       },
     });
 
@@ -77,12 +81,21 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       where: { id: entity.id },
       data: {
         postTitle: pojoEntity.postTitle,
+        videoLink: pojoEntity.videoLink,
+        postAnons: pojoEntity.postAnons,
+        postText: pojoEntity.postText,
+        quoteText: pojoEntity.quoteText,
+        quoteAuthor: pojoEntity.quoteAuthor,
+        photo: pojoEntity.photo,
+        linkUrl: pojoEntity.linkUrl,
+        linkDescription: pojoEntity.linkDescription,
+        tags: pojoEntity.tags,
         type: pojoEntity.type,
         publicationStatus: pojoEntity.publicationStatus,
-        tags: pojoEntity.tags,
       },
       include: {
         comments: true,
+        likes: true,
       },
     });
   }
@@ -112,7 +125,13 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     ]);
 
     return {
-      entities: records.map((record) => this.createEntityFromDocument(record)),
+      entities: records.map((record) =>
+        this.createEntityFromDocument({
+          ...record,
+          type: record.type as PostType,
+          publicationStatus: record.publicationStatus as PostStatus,
+        })
+      ),
       currentPage: query?.page,
       totalPages: this.calculatePostsPage(postCount, take),
       itemsPerPage: take,

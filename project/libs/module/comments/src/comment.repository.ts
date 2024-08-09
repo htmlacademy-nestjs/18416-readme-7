@@ -19,21 +19,15 @@ export class CommentRepository extends BasePostgresRepository<
     super(entityFactory, client);
   }
 
-  public async save(entity: CommentEntity) {
+  public async save(entity: CommentEntity): Promise<void> {
     const record = await this.client.comment.create({
-      data: { ...entity.toPOJO() },
+      data: {
+        text: entity.text,
+        postId: entity.postId,
+        userId: entity.userId,
+      },
     });
-
     entity.id = record.id;
-  }
-
-  public async createComment(entity: CommentEntity): Promise<CommentEntity> {
-    const record = await this.client.comment.create({
-      data: { ...entity.toPOJO() },
-    });
-
-    entity.id = record.id;
-    return entity;
   }
 
   public async findById(id: string): Promise<CommentEntity> {

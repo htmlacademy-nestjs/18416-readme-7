@@ -46,9 +46,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
     this.createdAt = post.createdAt;
     this.updatedAt = post.updatedAt;
     this.publishedAt = post.publishedAt;
-    this.publicationStatus = post.publicationStatus
-      ? post.publicationStatus
-      : undefined;
+    this.publicationStatus = post.publicationStatus;
     this.isPublicationReposted = post.isPublicationReposted
       ? post.isPublicationReposted
       : undefined;

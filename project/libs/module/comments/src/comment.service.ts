@@ -1,14 +1,9 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CommentRepository } from './comment.repository';
 import { CommentEntity } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { Comment } from '@project/shared/core';
 import { CommentFactory } from './comment.factory';
 
 @Injectable()
@@ -25,11 +20,9 @@ export class CommentService {
   public async createComment(
     postId: string,
     dto: CreateCommentDto
-  ): Promise<CommentEntity> {
+  ): Promise<void> {
     const commentEntity = this.commentFactory.create({ postId, ...dto });
-    const comment = await this.commentRepository.createComment(commentEntity);
-
-    return comment;
+    await this.commentRepository.save(commentEntity);
   }
 
   public async getComments(postId: string): Promise<CommentEntity[]> {

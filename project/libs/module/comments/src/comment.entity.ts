@@ -22,8 +22,8 @@ export class CommentEntity extends Entity implements StorableEntity<Comment> {
     this.text = comment.text;
     this.userId = comment.userId;
     this.postId = comment.postId;
-    this.createdAt = comment.createdAt ?? undefined;
-    this.updatedAt = comment.updatedAt ?? undefined;
+    this.createdAt = comment.createdAt;
+    this.updatedAt = comment.updatedAt;
   }
 
   public toPOJO(): Comment {
@@ -35,9 +35,5 @@ export class CommentEntity extends Entity implements StorableEntity<Comment> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
-  }
-
-  static fromObject(data: Comment): CommentEntity {
-    return new CommentEntity(data);
   }
 }
