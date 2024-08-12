@@ -1,0 +1,46 @@
+# Create a new user
+POST http://localhost:3000/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "jason@statham.local",
+  "dateBirth": "1967-07-26",
+  "firstname": "Jason",
+  "lastname": "Statham",
+  "password": "boyko1967"
+}
+
+###
+
+# Get user by ID
+GET http://localhost:3000/api/users/661c4efd846b53843bbbb31d HTTP/1.1
+
+###
+
+# Login user by email and password
+POST http://localhost:3000/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "jason@statham.local",
+  "password": "boyko1967"
+}
+
+###
+
+# Update user password
+PUT http://localhost:3000/api/users/661c4efd846b53843bbbb31d/password HTTP/1.1
+Content-Type: application/json
+
+{
+  "oldPassword": "boyko11967",
+  "newPassword": "boyko$1967"
+}
+
+###
+
+# Subscribe to user
+PUT http://localhost:3000/api/users/subscribe?userId=661c4efd846b53843bbbb31d HTTP/1.1
+Content-Type: application/json
+
+###

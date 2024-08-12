@@ -1,10 +1,16 @@
-import { PostType, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const FIRST_POST_UUID = '3234545345-7asdfd5-435df-23432423-234234234234234';
 const SECOND_POST_UUID = '32423dfsdfs0-adsasd-44435-6546546456-45645645645';
 
 const FIRST_USER_ID = 'sada324234sdffsf23423423';
 const SECOND_USER_ID = 'zxc234234sdfsdf2342332';
+
+enum PostType {
+  video = 'video',
+  text = 'text',
+  quote = 'quote',
+}
 
 function getPosts() {
   return [
@@ -13,6 +19,7 @@ function getPosts() {
       name: 'Отличный текст для проверки',
       userId: FIRST_USER_ID,
       postAnons: 'какой-то там анонс публикации',
+      postText: 'Какой-то там текст',
       type: PostType.text,
       publicationStatus: 'draft',
       publicationRepostNumber: 1,
@@ -49,6 +56,8 @@ async function seedDb(prismaClient: PrismaClient) {
       create: {
         id: post.id,
         name: post.name ? post.name : '',
+        postAnons: post.postAnons ? post.postAnons : '',
+        postText: post.postText ? post.postText : '',
         quoteText: post.quoteText ? post.quoteText : '',
         quoteAuthor: post.quoteAuthor ? post.quoteAuthor : '',
         userId: post.userId,
