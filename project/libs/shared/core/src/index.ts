@@ -18,3 +18,6 @@ export { PaginationResult } from './lib/interfaces/pagination.interface';
 
 export { Token } from './lib/interfaces/token.interface';
 export { TokenPayload } from './lib/interfaces/token-payload.interface';
+
+export { File } from './lib/interfaces/file.interface';
+export { StoredFile } from './lib/interfaces/stored-file.interface';
