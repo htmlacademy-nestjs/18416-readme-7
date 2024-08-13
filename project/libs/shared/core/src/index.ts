@@ -21,3 +21,5 @@ export { TokenPayload } from './lib/interfaces/token-payload.interface';
 
 export { File } from './lib/interfaces/file.interface';
 export { StoredFile } from './lib/interfaces/stored-file.interface';
+
+export { Subscriber } from './lib/interfaces/subscriber.interface';
