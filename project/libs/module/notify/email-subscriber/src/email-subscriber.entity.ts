@@ -5,8 +5,7 @@ export class EmailSubscriberEntity
   implements StorableEntity<Subscriber>
 {
   public email: string;
-  public firstname: string;
-  public lastname: string;
+  public userName: string;
 
   constructor(subscriber?: Subscriber) {
     super();
@@ -20,16 +19,14 @@ export class EmailSubscriberEntity
 
     this.id = subscriber.id ?? '';
     this.email = subscriber.email;
-    this.firstname = subscriber.firstname;
-    this.lastname = subscriber.lastname;
+    this.userName = subscriber.userName;
   }
 
   public toPOJO(): Subscriber {
     return {
       id: this.id,
       email: this.email,
-      firstname: this.firstname,
-      lastname: this.lastname,
+      userName: this.userName,
     };
   }
 }
