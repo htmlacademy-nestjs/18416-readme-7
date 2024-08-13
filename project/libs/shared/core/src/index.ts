@@ -1,3 +1,5 @@
+import { RabbitRouting } from './lib/enums/rabbit-routing.enum';
+
 export { Entity } from './lib/base/entity';
 
 export { UserRole } from './lib/enums/user-role.enum';
@@ -23,3 +25,5 @@ export { File } from './lib/interfaces/file.interface';
 export { StoredFile } from './lib/interfaces/stored-file.interface';
 
 export { Subscriber } from './lib/interfaces/subscriber.interface';
+
+export { RabbitRouting } from './lib/enums/rabbit-routing.enum';
