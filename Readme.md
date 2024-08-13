@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 - Студент: [Павел Зотов](https://up.htmlacademy.ru/nodejs-2/7/user/18416).
-- Наставник: Rail Sakhaviev.
+- Наставник: Vladislav Poklonskiy.
 
 ---
 
