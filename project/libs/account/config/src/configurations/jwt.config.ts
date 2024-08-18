@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 import { registerAs } from '@nestjs/config';
 import { BlogUserEntity } from '@project/blog-user';
 export interface JWTConfig {
-  refreshTokenExpiresIn: string | number;
+  refreshTokenExpiresIn: string;
   refreshTokenSecret: string | Buffer;
   accessTokenSecret: string;
   accessTokenExpiresIn: string;
