@@ -12,7 +12,7 @@ import {
 
 import { ConfigService, ConfigType } from '@nestjs/config';
 
-import { dbConfig } from '@project/account-config';
+import { dbConfig, jwtConfig } from '@project/account-config';
 
 import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
 import { Token, TokenPayload, User, UserRole } from '@project/shared/core';
@@ -36,7 +36,9 @@ export class AuthenticationService {
 
     @Inject(dbConfig.KEY)
     private readonly databaseConfig: ConfigType<typeof dbConfig>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    @Inject(jwtConfig.KEY)
+    private readonly jwtOptions: ConfigType<typeof jwtConfig>
   ) {}
 
   public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
@@ -109,7 +111,11 @@ export class AuthenticationService {
 
     try {
       const accessToken = await this.jwtService.signAsync(payload);
-      return { accessToken };
+      const refreshToken = await this.jwtService.signAsync(payload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn,
+      });
+      return { accessToken, refreshToken };
     } catch (error) {
       this.logger.error('[Token generation error]: ' + error.message);
       throw new HttpException(
@@ -117,5 +123,15 @@ export class AuthenticationService {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  public async getUserByEmail(email: string) {
+    const existUser = await this.blogUserRepository.findByEmail(email);
+
+    if (!existUser) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return existUser;
   }
 }
