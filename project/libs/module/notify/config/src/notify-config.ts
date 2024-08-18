@@ -1,11 +1,12 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
+import { NotifyConfigEnum } from './notify.enum';
 
-const DEFAULT_PORT = 3002;
-const DEFAULT_MONGO_PORT = 27017;
+const DEFAULT_PORT = NotifyConfigEnum.DEFAULT_PORT;
+const DEFAULT_MONGO_PORT = NotifyConfigEnum.DEFAULT_MONGO_PORT;
+const DEFAULT_RABBIT_PORT = NotifyConfigEnum.DEFAULT_RABBIT_PORT;
+const DEFAULT_SMTP_PORT = NotifyConfigEnum.DEFAULT_SMTP_PORT;
 const ENVIRONMENTS = ['development', 'production', 'stage'] as const;
-const DEFAULT_RABBIT_PORT = 5672;
-const DEFAULT_SMTP_PORT = 25;
 
 type Environment = (typeof ENVIRONMENTS)[number];
 
