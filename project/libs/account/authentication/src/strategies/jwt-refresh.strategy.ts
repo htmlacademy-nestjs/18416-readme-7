@@ -9,6 +9,7 @@ import { RefreshTokenPayload } from '@project/shared/core';
 import { AuthenticationService } from '../authentication.service';
 import { TokenNotExistsException } from '../exceptions/token-not-exists.exception';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { RefreshTokenParams } from '../authentication.enum';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -23,7 +24,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: jwtOptions.refreshTokenSecret,
+      secretOrKey: RefreshTokenParams.REFRESH_TOKEN_SECRET,
     });
   }
 

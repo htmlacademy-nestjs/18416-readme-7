@@ -8,6 +8,7 @@ import { parseTime } from '@project/helpers';
 
 import { RefreshTokenRepository } from './refresh-token.repository';
 import { RefreshTokenEntity } from './refresh-token.entity';
+import { RefreshTokenParams } from '../authentication.enum';
 
 @Injectable()
 export class RefreshTokenService {
@@ -18,7 +19,7 @@ export class RefreshTokenService {
   ) {}
 
   public async createRefreshSession(payload: RefreshTokenPayload) {
-    const timeValue = parseTime(this.jwtOptions.refreshTokenExpiresIn);
+    const timeValue = parseTime(RefreshTokenParams.REFRESH_TOKEN_EXPIRES_IN);
     const refreshToken = new RefreshTokenEntity({
       tokenId: payload.tokenId,
       createdAt: new Date(),

@@ -21,7 +21,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 import { LoginUserDto } from './dto/login-user.dto';
 
-import { AuthenticationResponseStatuses } from './authentication.enum';
+import {
+  AuthenticationResponseStatuses,
+  RefreshTokenParams,
+} from './authentication.enum';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { createJWTPayload } from '@project/helpers';
@@ -115,8 +118,8 @@ export class AuthenticationService {
       const refreshToken = await this.jwtService.signAsync(
         refreshTokenPayload,
         {
-          secret: this.jwtOptions.refreshTokenSecret,
-          expiresIn: this.jwtOptions.refreshTokenExpiresIn,
+          secret: RefreshTokenParams.REFRESH_TOKEN_SECRET,
+          expiresIn: RefreshTokenParams.REFRESH_TOKEN_EXPIRES_IN,
         }
       );
 
