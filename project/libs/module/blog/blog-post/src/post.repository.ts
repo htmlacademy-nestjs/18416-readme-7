@@ -39,9 +39,6 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
         comments: {
           connect: [],
         },
-        likes: {
-          connect: [],
-        },
       },
     });
 
@@ -63,7 +60,6 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       },
       include: {
         comments: true,
-        likes: true,
       },
     });
 
@@ -75,7 +71,6 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       ...document,
       type: document.type as PostType,
       publicationStatus: document.publicationStatus as PostStatus,
-      likes: [],
     });
   }
 
@@ -99,6 +94,8 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
         isPublicationReposted: pojoEntity.isPublicationReposted,
         originalPublicationId: pojoEntity.originalPublicationId,
         originalUserId: pojoEntity.originalUserId,
+        likesCount: pojoEntity.likesCount,
+        commentsCount: pojoEntity.commentsCount,
       },
       include: {
         comments: true,
@@ -107,15 +104,42 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     });
   }
 
-  public async find(query?: PostQuery): Promise<PaginationResult<PostEntity>> {
+  public async find(
+    query?: PostQuery,
+    isDraft = false,
+    users: string[] = []
+  ): Promise<PaginationResult<PostEntity>> {
     const skip =
       query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit;
     const where: Prisma.PostWhereInput = {};
     const orderBy: Prisma.PostOrderByWithRelationInput = {};
+    where.publicationStatus = isDraft ? PostStatus.DRAFT : PostStatus.PUBLISHED;
+
+    if (users?.length > 0) {
+      where.userId = {
+        in: users,
+      };
+    }
 
     if (query?.sortDirection) {
       orderBy.createdAt = query.sortDirection;
+    } else if (query.sortByLikes) {
+      orderBy.likesCount = query.sortByLikes;
+    } else if (query?.sortByComments) {
+      orderBy.commentsCount = query.sortByComments;
+    }
+
+    if (query?.type) {
+      where.type = query.type;
+    }
+
+    if (query?.userId) {
+      where.userId = query.userId;
+    }
+
+    if (query?.tag) {
+      where.tags = { has: query.tag };
     }
 
     const [records, postCount] = await Promise.all([
@@ -163,5 +187,29 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     }
 
     return document;
+  }
+
+  public async repost(
+    existingPost: PostEntity,
+    userId: string
+  ): Promise<PostEntity> {
+    const { id, ...pojoEntity } = existingPost.toPOJO();
+
+    const record = await this.client.post.create({
+      data: {
+        ...pojoEntity,
+        originalPublicationId: id,
+        userId,
+        originalUserId: existingPost.userId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isPublicationReposted: true,
+        comments: {
+          connect: [],
+        },
+      },
+    });
+
+    return this.createEntityFromDocument(record as Post);
   }
 }

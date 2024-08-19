@@ -29,6 +29,7 @@ import { JwtAuthGuard } from '@project/authentication';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  // Показ конкретной публикации
   @ApiResponse({
     type: PostWithPaginationRdo,
     status: HttpStatus.OK,
@@ -44,6 +45,7 @@ export class PostController {
     return fillDto(PostRdo, post.toPOJO());
   }
 
+  // Показ всех публикаций
   @ApiResponse({
     type: PostWithPaginationRdo,
     status: HttpStatus.OK,
@@ -63,6 +65,7 @@ export class PostController {
     return fillDto(PostWithPaginationRdo, result);
   }
 
+  // Создание публикации
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.OK,
@@ -83,6 +86,7 @@ export class PostController {
     return fillDto(PostRdo, newPost.toPOJO());
   }
 
+  // Удаление публикации
   @ApiResponse({
     status: HttpStatus.OK,
     description: postMessages.POST_DELETED,
@@ -98,6 +102,7 @@ export class PostController {
     await this.postService.deletePost(id);
   }
 
+  // Апдейт публикации
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.OK,
@@ -118,6 +123,7 @@ export class PostController {
     return fillDto(PostRdo, updatedPost.toPOJO());
   }
 
+  // Создание комментария
   @ApiResponse({
     type: CommentRdo,
     status: HttpStatus.OK,
@@ -136,6 +142,7 @@ export class PostController {
     return fillDto(CommentRdo, newComment.toPOJO());
   }
 
+  // Репост публикации
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.OK,

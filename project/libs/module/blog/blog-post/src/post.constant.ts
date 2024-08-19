@@ -16,4 +16,7 @@ export enum postMessages {
   POST_CREATED = 'Post was created',
   ERROR = 'Internal server error',
   POST_UNAUTHORIZED = 'Unauthorized to work with publications',
+  USER_IS_ALREADY_AUTHOR = 'User is already an author',
+  CANNOT_REPOST_DRAFT = 'Cannot repost a draft',
+  POST_ALREADY_REPOSTED = 'This post is already reposted',
 }

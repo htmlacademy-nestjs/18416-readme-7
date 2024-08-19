@@ -58,6 +58,14 @@ export class CreatePostDto {
   public comments?: string[];
 
   @IsOptional()
+  @IsNumber()
+  public likesCount: number;
+
+  @IsOptional()
+  @IsNumber()
+  public commentsCount: number;
+
+  @IsOptional()
   @IsString()
   public originalPublicationId?: string;
 

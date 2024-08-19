@@ -1,8 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PostRepository } from './post.repository';
 import { PostQuery } from './post.query';
 import { PostEntity } from './post.entity';
-import { PaginationResult } from '@project/shared/core';
+import { PaginationResult, PostStatus } from '@project/shared/core';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostFactory } from './post.factory';
 import { postMessages } from './post.constant';
@@ -23,9 +27,11 @@ export class PostService {
   ) {}
 
   public async getAllPosts(
-    query?: PostQuery
+    query?: PostQuery,
+    isDraft = false,
+    users: string[] = []
   ): Promise<PaginationResult<PostEntity>> {
-    return this.postRepository.find(query);
+    return this.postRepository.find(query, isDraft, users);
   }
 
   public async createPost(dto: CreatePostDto): Promise<PostEntity> {
@@ -84,21 +90,28 @@ export class PostService {
   public async makeRepost(postId: string, userId: string): Promise<PostEntity> {
     const existingPost = await this.getPost(postId);
 
-    const repostedPublication = {
-      ...existingPost,
-      id: existingPost.id,
-      userId: userId,
-      originalUserId: existingPost.userId,
-      originalPublicationId: existingPost.id,
-      publicationRepostNumber: existingPost.publicationRepostNumber + 1,
-      updatedAt: new Date(),
-      createdAt: new Date(),
-      populate: existingPost.populate,
-      toPOJO: existingPost.toPOJO,
-    };
+    if (!existingPost) {
+      throw new NotFoundException(`Post with ID ${postId} not found`);
+    }
 
-    await this.postRepository.save(repostedPublication);
+    if (existingPost.userId === userId) {
+      throw new ForbiddenException(postMessages.USER_IS_ALREADY_AUTHOR);
+    }
 
-    return existingPost;
+    if (existingPost.publicationStatus === PostStatus.DRAFT) {
+      throw new ForbiddenException(postMessages.CANNOT_REPOST_DRAFT);
+    }
+
+    const { entities } = await this.getAllPosts({ userId } as PostQuery);
+    for (const entity of entities) {
+      if (
+        entity.isPublicationReposted &&
+        entity.originalPublicationId === existingPost.id
+      ) {
+        throw new ForbiddenException(postMessages.POST_ALREADY_REPOSTED);
+      }
+    }
+
+    return await this.postRepository.repost(existingPost, userId);
   }
 }

@@ -34,8 +34,9 @@ export class PostFactory implements EntityFactory<PostEntity> {
     entity.photo = dto.photo;
     entity.linkDescription = dto.linkDescription;
     entity.linkUrl = dto.linkUrl;
+    entity.likesCount = dto.likesCount;
+    entity.commentsCount = dto.commentsCount;
     entity.tags = [];
-    entity.likes = [];
     entity.comments = [];
 
     return entity;

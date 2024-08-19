@@ -43,6 +43,8 @@ model Post {
   publicationRepostNumber Int?
   comments                Comment[]
   likes                   Like[]
+  likesCount              Int
+  commentsCount           Int
   postAnons               String?
   postText                String?
   quoteText               String?
