@@ -84,10 +84,20 @@ export class PostService {
   public async makeRepost(postId: string, userId: string): Promise<PostEntity> {
     const existingPost = await this.getPost(postId);
 
-    existingPost.updatedAt = new Date();
-    existingPost.userId = userId;
-    existingPost.isPublicationReposted = true;
-    await this.postRepository.save(existingPost);
+    const repostedPublication = {
+      ...existingPost,
+      id: existingPost.id,
+      userId: userId,
+      originalUserId: existingPost.userId,
+      originalPublicationId: existingPost.id,
+      publicationRepostNumber: existingPost.publicationRepostNumber + 1,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+      populate: existingPost.populate,
+      toPOJO: existingPost.toPOJO,
+    };
+
+    await this.postRepository.save(repostedPublication);
 
     return existingPost;
   }

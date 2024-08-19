@@ -7,7 +7,8 @@ import { Comment } from './comment.interface';
 
 export interface Post extends Entity {
   id: string;
-  originalPublicationId: string;
+  originalPublicationId?: string;
+  originalUserId?: string;
   postTitle: string;
   videoLink: string;
   userId: string;
@@ -16,8 +17,8 @@ export interface Post extends Entity {
   updatedAt: Date;
   publishedAt: Date;
   publicationStatus: PostStatus;
-  isPublicationReposted: boolean;
-  publicationRepostNumber: number;
+  isPublicationReposted?: boolean;
+  publicationRepostNumber?: number;
   postAnons: string;
   postText: string;
   quoteText: string;

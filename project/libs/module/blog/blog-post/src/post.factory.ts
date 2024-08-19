@@ -18,6 +18,7 @@ export class PostFactory implements EntityFactory<PostEntity> {
   public static createFromCreatePostDto(dto: CreatePostDto): PostEntity {
     const entity = new PostEntity();
     entity.originalPublicationId = dto.originalPublicationId;
+    entity.originalUserId = dto.originalUserId;
     entity.postTitle = dto.postTitle;
     entity.videoLink = dto.videoLink;
     entity.userId = dto.userId;

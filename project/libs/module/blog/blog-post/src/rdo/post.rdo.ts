@@ -30,6 +30,12 @@ export class PostRdo {
   @Expose()
   public isPublicationReposted: boolean;
 
+  @Expose()
+  public originalUserId?: string;
+
+  @Expose()
+  public originalPublicationId?: string;
+
   @ApiProperty({
     description: 'Post type',
     example: PostType.LINK,

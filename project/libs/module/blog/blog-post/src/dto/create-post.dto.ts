@@ -61,6 +61,15 @@ export class CreatePostDto {
   @IsString()
   public originalPublicationId?: string;
 
+  @IsString()
+  @IsMongoId()
+  @IsOptional()
+  public originalUserId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  public isPublicationReposted?: boolean;
+
   @IsOptional()
   @IsString()
   public videoLink?: string;
@@ -72,10 +81,6 @@ export class CreatePostDto {
   @IsOptional()
   @IsString()
   public publicationStatus?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  public isPublicationReposted?: boolean;
 
   @IsOptional()
   @IsNumber()

@@ -3,7 +3,6 @@ import { Entity, Post, StorableEntity, Comment } from '@project/shared/core';
 import { PostType, PostStatus } from '@project/shared/enums';
 
 export class PostEntity extends Entity implements StorableEntity<Post> {
-  public originalPublicationId: string;
   public postTitle: string;
   public videoLink: string;
   public userId: string;
@@ -13,7 +12,9 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
   public publishedAt: Date;
   public publicationStatus: PostStatus;
   public isPublicationReposted: boolean;
-  public publicationRepostNumber: number;
+  public originalPublicationId?: string;
+  public originalUserId?: string;
+  public publicationRepostNumber?: number;
   public postAnons: string;
   public postText: string;
   public quoteText: string;
@@ -39,6 +40,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
     this.originalPublicationId = post.originalPublicationId
       ? post.originalPublicationId
       : undefined;
+    this.originalUserId = post.originalUserId ? post.originalUserId : undefined;
     this.postTitle = post.postTitle ? post.postTitle : undefined;
     this.videoLink = post.videoLink ? post.videoLink : undefined;
     this.userId = post.userId ? post.userId : undefined;
@@ -87,6 +89,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
       publicationStatus: this.publicationStatus,
       isPublicationReposted: this.isPublicationReposted,
       publicationRepostNumber: this.publicationRepostNumber,
+      originalUserId: this.originalUserId,
       postAnons: this.postAnons,
       postText: this.postText,
       quoteText: this.quoteText,
