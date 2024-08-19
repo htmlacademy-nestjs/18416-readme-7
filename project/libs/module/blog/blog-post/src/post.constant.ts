@@ -15,4 +15,5 @@ export enum postMessages {
   POST_DELETED = 'Post was deleted',
   POST_CREATED = 'Post was created',
   ERROR = 'Internal server error',
+  POST_UNAUTHORIZED = 'Unauthorized to work with publications',
 }

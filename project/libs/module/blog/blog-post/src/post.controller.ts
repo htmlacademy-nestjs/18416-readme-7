@@ -72,6 +72,10 @@ export class PostController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: postMessages.ERROR,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.POST_UNAUTHORIZED,
+  })
   @UseGuards(JwtAuthGuard)
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
@@ -82,6 +86,10 @@ export class PostController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: postMessages.POST_DELETED,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.POST_UNAUTHORIZED,
   })
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
@@ -98,6 +106,10 @@ export class PostController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: postMessages.POST_NOT_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.POST_UNAUTHORIZED,
   })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
@@ -133,6 +145,11 @@ export class PostController {
     status: HttpStatus.NOT_FOUND,
     description: postMessages.POST_NOT_FOUND,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.POST_UNAUTHORIZED,
+  })
+  @UseGuards(JwtAuthGuard)
   @Post(':postId/:userId')
   public async repost(
     @Param('postId') postId: string,
