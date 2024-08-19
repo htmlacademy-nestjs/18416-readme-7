@@ -31,7 +31,6 @@ export class PostService {
   public async createPost(dto: CreatePostDto): Promise<PostEntity> {
     const newPost = PostFactory.createFromCreatePostDto(dto);
     await this.postRepository.save(newPost);
-    console.log(newPost);
     return newPost;
   }
 
@@ -80,5 +79,16 @@ export class PostService {
     await this.commentRepository.save(newComment);
 
     return newComment;
+  }
+
+  public async makeRepost(postId: string, userId: string): Promise<PostEntity> {
+    const existingPost = await this.getPost(postId);
+
+    existingPost.updatedAt = new Date();
+    existingPost.userId = userId;
+    existingPost.isPublicationReposted = true;
+    await this.postRepository.save(existingPost);
+
+    return existingPost;
   }
 }

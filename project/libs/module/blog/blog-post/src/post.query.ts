@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer';
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsIn,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 import { SortDirection } from '@project/shared/core';
 
@@ -8,6 +15,7 @@ import {
   DEFAULT_SORT_DIRECTION,
   DEFAULT_PAGE_COUNT,
 } from './post.constant';
+import { PostType } from '@prisma/client';
 
 export class PostQuery {
   @Transform(({ value }) => +value || DEFAULT_POST_COUNT_LIMIT)
@@ -26,4 +34,26 @@ export class PostQuery {
   @IsString()
   @IsOptional()
   public pageTitle: string;
+
+  @IsIn(Object.values(SortDirection))
+  @IsOptional()
+  public sortByLikes: SortDirection;
+
+  @IsIn(Object.values(SortDirection))
+  @IsOptional()
+  public sortByComments: SortDirection;
+
+  @IsString()
+  @IsEnum(PostType)
+  @IsOptional()
+  public type: PostType;
+
+  @IsString()
+  @IsMongoId()
+  @IsOptional()
+  public authorId: string;
+
+  @IsString()
+  @IsOptional()
+  public tag: string;
 }
