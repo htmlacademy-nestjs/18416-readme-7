@@ -130,6 +130,10 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       orderBy.commentsCount = query.sortByComments;
     }
 
+    if (query?.postTitle) {
+      where.postTitle = query?.postTitle;
+    }
+
     if (query?.type) {
       where.type = query.type;
     }

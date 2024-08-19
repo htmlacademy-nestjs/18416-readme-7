@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 
@@ -22,8 +23,9 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CommentRdo, CreateCommentDto } from '@project/comments';
 import { ApiResponse } from '@nestjs/swagger';
-import { postMessages } from './post.constant';
+import { postMessages, postParams } from './post.constant';
 import { JwtAuthGuard } from '@project/authentication';
+import { RequestWithUser } from './interfaces/request-with-user.interface';
 
 @Controller('posts')
 export class PostController {
@@ -84,6 +86,34 @@ export class PostController {
   public async create(@Body() dto: CreatePostDto) {
     const newPost = await this.postService.createPost(dto);
     return fillDto(PostRdo, newPost.toPOJO());
+  }
+
+  // Список черновиков пользователя
+  @ApiResponse({
+    type: PostRdo,
+    status: HttpStatus.OK,
+    description: postMessages.POSTS_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.POST_UNAUTHORIZED,
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('/drafts')
+  public async getDrafts(@Req() { user }: RequestWithUser) {
+    const postWithPagination = await this.postService.getAllPosts(
+      { userId: user.id } as PostQuery,
+      true
+    );
+
+    const result = {
+      ...postWithPagination,
+      entities: postWithPagination.entities.map((blogPost) =>
+        blogPost.toPOJO()
+      ),
+    };
+
+    return fillDto(PostWithPaginationRdo, result);
   }
 
   // Удаление публикации
@@ -157,12 +187,34 @@ export class PostController {
     description: postMessages.POST_UNAUTHORIZED,
   })
   @UseGuards(JwtAuthGuard)
-  @Post(':postId/:userId')
+  @Post('repost/:postId')
   public async repost(
-    @Param('postId') postId: string,
-    @Param('userId') userId: string
+    @Req() { user }: RequestWithUser,
+    @Param('postId') postId: string
   ): Promise<PostRdo> {
-    const newPost = await this.postService.makeRepost(postId, userId);
+    const newPost = await this.postService.makeRepost(postId, user.id);
     return fillDto(PostRdo, newPost.toPOJO());
+  }
+
+  // Поиск публикации по тайтлу
+  @ApiResponse({
+    type: [PostRdo],
+    status: HttpStatus.OK,
+    description: postMessages.POSTS_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: postMessages.POST_NOT_FOUND,
+  })
+  @Get('/search')
+  public async search(@Query('postTitle') postTitle: string) {
+    const postWithPagination = await this.postService.getAllPosts({
+      postTitle,
+      limit: postParams.DEFAULT_SEARCH_LIMIT,
+    } as PostQuery);
+
+    return postWithPagination.entities.map((blogPost) =>
+      fillDto(PostRdo, blogPost.toPOJO())
+    );
   }
 }

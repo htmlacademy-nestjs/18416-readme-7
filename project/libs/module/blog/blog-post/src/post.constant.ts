@@ -1,8 +1,11 @@
 import { SortDirection } from '@project/shared/core';
 
-export const DEFAULT_POST_COUNT_LIMIT = 10;
+export enum postParams {
+  DEFAULT_POST_COUNT_LIMIT = 10,
+  DEFAULT_PAGE_COUNT = 1,
+  DEFAULT_SEARCH_LIMIT = 20,
+}
 export const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
-export const DEFAULT_PAGE_COUNT = 1;
 
 export enum postMessages {
   POSTS_FOUND = 'Posts were found',

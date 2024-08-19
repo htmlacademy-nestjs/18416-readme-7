@@ -28,8 +28,4 @@ function getConfig(): JWTConfig {
   return config;
 }
 
-export interface RequestWithUser {
-  user?: BlogUserEntity;
-}
-
 export default registerAs('jwt', getConfig);
