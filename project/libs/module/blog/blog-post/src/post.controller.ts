@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import { fillDto } from '@project/helpers';
@@ -22,6 +23,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { CommentRdo, CreateCommentDto } from '@project/comments';
 import { ApiResponse } from '@nestjs/swagger';
 import { postMessages } from './post.constant';
+import { JwtAuthGuard } from '@project/authentication';
 
 @Controller('posts')
 export class PostController {
@@ -70,6 +72,7 @@ export class PostController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: postMessages.ERROR,
   })
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
     const newPost = await this.postService.createPost(dto);
@@ -80,6 +83,7 @@ export class PostController {
     status: HttpStatus.OK,
     description: postMessages.POST_DELETED,
   })
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async destroy(@Param('id') id: string) {
@@ -95,6 +99,7 @@ export class PostController {
     status: HttpStatus.NOT_FOUND,
     description: postMessages.POST_NOT_FOUND,
   })
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   public async update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     const updatedPost = await this.postService.updatePost(id, dto);
