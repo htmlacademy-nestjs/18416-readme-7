@@ -23,9 +23,14 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CommentRdo, CreateCommentDto } from '@project/comments';
 import { ApiResponse } from '@nestjs/swagger';
-import { postMessages, postParams } from './post.constant';
+import {
+  postMessages,
+  postParams,
+  postResponseMessages,
+} from './post.constant';
 import { JwtAuthGuard } from '@project/authentication';
 import { RequestWithUser } from './interfaces/request-with-user.interface';
+import { CreateLikeDto, LikeRdo } from '@project/blog-like';
 
 @Controller('posts')
 export class PostController {
@@ -216,5 +221,44 @@ export class PostController {
     return postWithPagination.entities.map((blogPost) =>
       fillDto(PostRdo, blogPost.toPOJO())
     );
+  }
+
+  // Создание лайка
+  @ApiResponse({
+    type: LikeRdo,
+    status: HttpStatus.CREATED,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: postResponseMessages.LIKE_ALREADY_EXISTS,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: postResponseMessages.POST_IS_NOT_PUBLISHED,
+  })
+  @Post('/:postId/likes')
+  public async createLike(
+    @Param('postId') postId: string,
+    @Body() dto: CreateLikeDto
+  ) {
+    const newLike = await this.postService.addLike(postId, dto);
+    return fillDto(LikeRdo, newLike.toPOJO());
+  }
+
+  // Удаление лайка
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: postResponseMessages.POST_LIKE_NOT_FOUND,
+  })
+  @Delete('/:postId/likes')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async deleteLike(
+    @Param('postId') postId: string,
+    @Body() dto: CreateLikeDto
+  ) {
+    await this.postService.deleteLike(postId, dto);
   }
 }

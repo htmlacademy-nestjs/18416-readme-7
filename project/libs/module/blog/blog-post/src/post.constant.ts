@@ -22,4 +22,26 @@ export enum postMessages {
   USER_IS_ALREADY_AUTHOR = 'User is already an author',
   CANNOT_REPOST_DRAFT = 'Cannot repost a draft',
   POST_ALREADY_REPOSTED = 'This post is already reposted',
+  LIKES_ONLY_FOR_PUBLISHED_POSTS = 'Likes are available only for published',
+  LIKES_COUNT = 'Likes count',
+}
+
+export enum postResponseMessages {
+  POST_LIKE_NOT_FOUND = 'Like was not found',
+  POST_IS_NOT_PUBLISHED = 'Post is not published',
+  LIKE_ALREADY_EXISTS = 'Like already exists',
+  USER_NOT_AUTHORIZED = 'User is not authorized',
+}
+
+export enum postValidateMessages {
+  POST_TITLE_REQUIRED = 'Title is required',
+  POST_TITLE_MAX_LENGTH = 'Title must be less than 255 characters',
+  POST_TITLE_MIN_LENGTH = 'Title must be more than 3 characters',
+  POST_CONTENT_REQUIRED = 'Content is required',
+  POST_CONTENT_MAX_LENGTH = 'Content must be less than 10000 characters',
+  POST_CONTENT_MIN_LENGTH = 'Content must be more than 3 characters',
+  NAME_IS_NOT_STRING = 'Name is not in string format',
+  NAME_MIN_LENGTH = 'Name must be more than 3 characters',
+  NAME_MAX_LENGTH = 'Name must be less than 255 characters',
+  PASSWORD_IS_NOT_STRING = 'Password is not in string format',
 }

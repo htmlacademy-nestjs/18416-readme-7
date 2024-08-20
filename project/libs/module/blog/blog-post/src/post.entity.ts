@@ -24,6 +24,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
   public linkUrl: string;
   public tags: string[];
   public likesCount?: number;
+  public likes?: string[];
   public commentsCount?: number;
   public comments: Comment[];
 
@@ -67,6 +68,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
     this.linkUrl = post.linkUrl ? post.linkUrl : undefined;
     this.tags = post.tags ? post.tags : [];
     this.comments = post.comments ? post.comments : [];
+    this.likes = post.likes ? post.likes : [];
     this.commentsCount = post.commentsCount ? post.commentsCount : undefined;
 
     const postCommentFactory = new CommentFactory();
@@ -74,6 +76,16 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
       const blogCommentEntity = postCommentFactory.create(comment);
       this.comments.push(blogCommentEntity);
     }
+  }
+
+  public enableLike(userId: string) {
+    if (this.likes.includes(userId)) {
+      this.likes = this.likes.filter((like) => like !== userId);
+    } else {
+      this.likes.push(userId);
+    }
+    this.likesCount = this.likes.length;
+    return this;
   }
 
   public toPOJO(): Post {
@@ -101,6 +113,7 @@ export class PostEntity extends Entity implements StorableEntity<Post> {
       tags: this.tags,
       likesCount: this.likesCount,
       commentsCount: this.commentsCount,
+      likes: this.likes,
       comments: this.comments?.map((comment) => comment.toPOJO()) ?? [],
     };
   }

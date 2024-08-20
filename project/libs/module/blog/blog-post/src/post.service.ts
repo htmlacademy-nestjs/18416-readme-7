@@ -17,13 +17,21 @@ import {
   CommentRepository,
   CreateCommentDto,
 } from '@project/comments';
+import {
+  CreateLikeDto,
+  LikeEntity,
+  LikeFactory,
+  LikeRepository,
+} from '@project/blog-like';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
     private readonly commentRepository: CommentRepository,
-    private readonly commentFactory: CommentFactory
+    private readonly commentFactory: CommentFactory,
+    private readonly likeFactory: LikeFactory,
+    private readonly likeRepository: LikeRepository
   ) {}
 
   public async getAllPosts(
@@ -113,5 +121,37 @@ export class PostService {
     }
 
     return await this.postRepository.repost(existingPost, userId);
+  }
+
+  public async addLike(
+    postId: string,
+    dto: CreateLikeDto
+  ): Promise<LikeEntity> {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(`Post with ID ${postId} not found`);
+    }
+
+    if (existsPost.publicationStatus !== PostStatus.PUBLISHED) {
+      throw new ForbiddenException(postMessages.LIKES_ONLY_FOR_PUBLISHED_POSTS);
+    }
+
+    const newLike = this.likeFactory.createFromDto(dto, existsPost.id);
+    await this.likeRepository.save(newLike);
+
+    // Апдейтим likesCount
+    existsPost.likesCount += 1;
+    await this.postRepository.update(existsPost);
+
+    return newLike;
+  }
+
+  public async deleteLike(postId: string, dto: CreateLikeDto): Promise<void> {
+    const existsPost = await this.getPost(postId);
+    await this.likeRepository.delete(existsPost.id, dto.userId);
+
+    // Апдейтим likesCount
+    existsPost.likesCount -= 1;
+    await this.postRepository.update(existsPost);
   }
 }

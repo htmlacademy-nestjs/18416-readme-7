@@ -39,6 +39,9 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
         comments: {
           connect: [],
         },
+        likes: {
+          connect: [],
+        },
       },
     });
 
@@ -71,6 +74,7 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       ...document,
       type: document.type as PostType,
       publicationStatus: document.publicationStatus as PostStatus,
+      likes: [],
     });
   }
 
@@ -165,6 +169,7 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
           ...record,
           type: record.type as PostType,
           publicationStatus: record.publicationStatus as PostStatus,
+          likes: [],
         })
       ),
       currentPage: query?.page,
@@ -209,6 +214,9 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
         updatedAt: new Date(),
         isPublicationReposted: true,
         comments: {
+          connect: [],
+        },
+        likes: {
           connect: [],
         },
       },
