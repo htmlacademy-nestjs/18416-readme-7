@@ -16,6 +16,8 @@ import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';
+import { CommentQuery } from './comment.query';
+import { CommentWithPaginationRdo } from './rdo/comment-with-pagination.rdo';
 
 @Controller('posts/:postId/comments')
 export class CommentController {
@@ -28,10 +30,16 @@ export class CommentController {
   }
 
   @Get('/')
-  public async show(@Param('postId') postId: string) {
-    const commentEntities = await this.commentService.getComments(postId);
-    const comments = commentEntities.map((comment) => comment.toPOJO());
-    return fillDto(CommentRdo, comments);
+  public async show(@Param('postId') postId: string, query: CommentQuery) {
+    const commentEntities = await this.commentService.getComments(
+      postId,
+      query
+    );
+    const result = {
+      ...commentEntities,
+      entities: commentEntities.entities.map((comment) => comment.toPOJO()),
+    };
+    return fillDto(CommentWithPaginationRdo, result);
   }
 
   @Post('/')

@@ -27,3 +27,9 @@ export { StoredFile } from './lib/interfaces/stored-file.interface';
 export { Subscriber } from './lib/interfaces/subscriber.interface';
 
 export { RabbitRouting } from './lib/enums/rabbit-routing.enum';
+
+export { JwtToken } from './lib/interfaces/jwt-token.interface';
+export { RefreshTokenPayload } from './lib/interfaces/refresh-token-payload.interface';
+export { RequestWithTokenPayload } from './lib/interfaces/request-with-token-payload.interface';
+
+export { AppResponseMessage } from './lib/enums/app-response-message.enum';

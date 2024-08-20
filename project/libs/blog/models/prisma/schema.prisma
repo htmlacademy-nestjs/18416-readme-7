@@ -30,6 +30,7 @@ enum PostStatus {
 model Post {
   id                      String         @id @default(uuid())
   originalPublicationId   String?
+  originalUserId          String?
   postTitle               String?        @map("title")
   videoLink               String?
   userId                  String         @map("user_id")
@@ -38,10 +39,12 @@ model Post {
   updatedAt               DateTime       @default(now()) @map("updated_at")
   publishedAt             DateTime       @default(now()) @map("published_at")
   publicationStatus       PostStatus
-  isPublicationReposted   Boolean        @default(false)
-  publicationRepostNumber Int
+  isPublicationReposted   Boolean?        @default(false)
+  publicationRepostNumber Int?
   comments                Comment[]
   likes                   Like[]
+  likesCount              Int
+  commentsCount           Int
   postAnons               String?
   postText                String?
   quoteText               String?

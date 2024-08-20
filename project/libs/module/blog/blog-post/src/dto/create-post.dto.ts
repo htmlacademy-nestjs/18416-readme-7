@@ -58,8 +58,25 @@ export class CreatePostDto {
   public comments?: string[];
 
   @IsOptional()
+  @IsNumber()
+  public likesCount: number;
+
+  @IsOptional()
+  @IsNumber()
+  public commentsCount: number;
+
+  @IsOptional()
   @IsString()
   public originalPublicationId?: string;
+
+  @IsString()
+  @IsMongoId()
+  @IsOptional()
+  public originalUserId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  public isPublicationReposted?: boolean;
 
   @IsOptional()
   @IsString()
@@ -72,10 +89,6 @@ export class CreatePostDto {
   @IsOptional()
   @IsString()
   public publicationStatus?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  public isPublicationReposted?: boolean;
 
   @IsOptional()
   @IsNumber()

@@ -49,11 +49,22 @@ export class LikeRepository extends BasePostgresRepository<LikeEntity, Like> {
     return likes.map(this.createEntityFromDocument);
   }
 
-  public async deleteById(id: string): Promise<void> {
-    await this.client.like.delete({
+  public async delete(postId: string, userId: string): Promise<void> {
+    const existLike = await this.client.like.findFirst({
       where: {
-        id,
+        postId,
+        userId,
       },
     });
+
+    if (existLike) {
+      await this.client.like.delete({
+        where: {
+          id: existLike.id,
+        },
+      });
+    } else {
+      throw new NotFoundException(`Like with id ${existLike.id} not found`);
+    }
   }
 }

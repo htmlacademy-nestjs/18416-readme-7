@@ -2,10 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CommentEntity } from './comment.entity';
 import { CommentFactory } from './comment.factory';
-import { Comment } from '@project/shared/core';
+import { Comment, PaginationResult } from '@project/shared/core';
 
 import { PrismaClientService } from '@project/blog-models';
 import { BasePostgresRepository } from '@project/data-access';
+import { CommentQuery } from './comment.query';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CommentRepository extends BasePostgresRepository<
@@ -30,6 +32,23 @@ export class CommentRepository extends BasePostgresRepository<
     entity.id = record.id;
   }
 
+  public async getCommentsCount(postId: string): Promise<number> {
+    const records = await this.client.comment.count({
+      where: {
+        postId,
+      },
+    });
+
+    return records;
+  }
+
+  private calculateCommentsPageCount(
+    totalCount: number,
+    limit: number
+  ): number {
+    return Math.ceil(totalCount / limit);
+  }
+
   public async findById(id: string): Promise<CommentEntity> {
     const comment = await this.client.comment.findFirst({
       where: {
@@ -42,14 +61,39 @@ export class CommentRepository extends BasePostgresRepository<
     return this.createEntityFromDocument(comment);
   }
 
-  public async findByPostId(postId: string): Promise<CommentEntity[]> {
-    const comments = await this.client.comment.findMany({
-      where: {
-        postId,
-      },
-    });
+  public async findByPostId(
+    postId: string,
+    query?: CommentQuery
+  ): Promise<PaginationResult<CommentEntity>> {
+    const skip =
+      query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
+    const take = query?.limit;
+    const where: Prisma.CommentWhereInput = {};
+    const orderBy: Prisma.CommentOrderByWithRelationInput = {};
 
-    return comments.map(this.createEntityFromDocument);
+    if (query?.sortDirection) {
+      orderBy.createdAt = query.sortDirection;
+    }
+
+    const [records, commentCount] = await Promise.all([
+      this.client.comment.findMany({
+        where,
+        orderBy,
+        skip,
+        take,
+      }),
+      this.getCommentsCount(postId),
+    ]);
+
+    return {
+      entities: records.map((record) =>
+        this.createEntityFromDocument(record as Comment)
+      ),
+      totalPages: this.calculateCommentsPageCount(commentCount, take),
+      totalItems: commentCount,
+      currentPage: query?.page,
+      itemsPerPage: take,
+    };
   }
 
   public async deleteById(id: string): Promise<void> {

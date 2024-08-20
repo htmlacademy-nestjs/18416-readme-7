@@ -18,6 +18,7 @@ export class PostFactory implements EntityFactory<PostEntity> {
   public static createFromCreatePostDto(dto: CreatePostDto): PostEntity {
     const entity = new PostEntity();
     entity.originalPublicationId = dto.originalPublicationId;
+    entity.originalUserId = dto.originalUserId;
     entity.postTitle = dto.postTitle;
     entity.videoLink = dto.videoLink;
     entity.userId = dto.userId;
@@ -33,8 +34,9 @@ export class PostFactory implements EntityFactory<PostEntity> {
     entity.photo = dto.photo;
     entity.linkDescription = dto.linkDescription;
     entity.linkUrl = dto.linkUrl;
+    entity.likesCount = dto.likesCount;
+    entity.commentsCount = dto.commentsCount;
     entity.tags = [];
-    entity.likes = [];
     entity.comments = [];
 
     return entity;

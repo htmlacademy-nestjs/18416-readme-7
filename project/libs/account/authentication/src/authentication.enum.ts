@@ -14,3 +14,8 @@ export enum AuthenticationValidateMessages {
   DATE_REGISTER_NOT_VALID = 'Register date is not valid',
   TOKEN_CREATION_ERROR = 'Ошибка при создании токена',
 }
+
+export enum RefreshTokenParams {
+  REFRESH_TOKEN_SECRET = '2323dsdfsdffds',
+  REFRESH_TOKEN_EXPIRES_IN = '30d',
+}

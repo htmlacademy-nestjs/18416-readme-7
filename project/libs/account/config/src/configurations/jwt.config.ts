@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { registerAs } from '@nestjs/config';
-
+import { BlogUserEntity } from '@project/blog-user';
 export interface JWTConfig {
   accessTokenSecret: string;
   accessTokenExpiresIn: string;
