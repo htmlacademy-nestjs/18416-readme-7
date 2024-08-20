@@ -10,7 +10,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 
 import { fillDto } from '@project/helpers';
@@ -21,16 +20,20 @@ import { PostQuery } from './post.query';
 import { PostWithPaginationRdo } from './rdo/post-with-pagination.rdo';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { CommentRdo, CreateCommentDto } from '@project/comments';
+import {
+  CommentRdo,
+  CreateCommentDto,
+  DeleteCommentDto,
+} from '@project/comments';
 import { ApiResponse } from '@nestjs/swagger';
 import {
   postMessages,
   postParams,
   postResponseMessages,
 } from './post.constant';
-import { JwtAuthGuard } from '@project/authentication';
 import { RequestWithUser } from './interfaces/request-with-user.interface';
 import { CreateLikeDto, LikeRdo } from '@project/blog-like';
+import { AppResponseMessage } from '@project/shared/core';
 
 @Controller('posts')
 export class PostController {
@@ -86,7 +89,6 @@ export class PostController {
     status: HttpStatus.UNAUTHORIZED,
     description: postMessages.POST_UNAUTHORIZED,
   })
-  @UseGuards(JwtAuthGuard)
   @Post('/')
   public async create(@Body() dto: CreatePostDto) {
     const newPost = await this.postService.createPost(dto);
@@ -103,7 +105,6 @@ export class PostController {
     status: HttpStatus.UNAUTHORIZED,
     description: postMessages.POST_UNAUTHORIZED,
   })
-  @UseGuards(JwtAuthGuard)
   @Get('/drafts')
   public async getDrafts(@Req() { user }: RequestWithUser) {
     const postWithPagination = await this.postService.getAllPosts(
@@ -130,7 +131,6 @@ export class PostController {
     status: HttpStatus.UNAUTHORIZED,
     description: postMessages.POST_UNAUTHORIZED,
   })
-  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async destroy(@Param('id') id: string) {
@@ -151,7 +151,6 @@ export class PostController {
     status: HttpStatus.UNAUTHORIZED,
     description: postMessages.POST_UNAUTHORIZED,
   })
-  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   public async update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     const updatedPost = await this.postService.updatePost(id, dto);
@@ -168,6 +167,10 @@ export class PostController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: postMessages.POST_COMMENT_ERROR,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AppResponseMessage.UNAUTHORIZED,
+  })
   @Post('/:postId/comments')
   public async createComment(
     @Param('postId') postId: string,
@@ -175,6 +178,42 @@ export class PostController {
   ) {
     const newComment = await this.postService.addComment(postId, dto);
     return fillDto(CommentRdo, newComment.toPOJO());
+  }
+
+  // Вывод списка комментариев к посту
+  @ApiResponse({
+    type: CommentRdo,
+    status: HttpStatus.OK,
+    description: postMessages.COMMENTS_FOUND,
+  })
+  @ApiResponse({
+    type: CommentRdo,
+    status: HttpStatus.NOT_FOUND,
+    description: postMessages.COMMENTS_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: postMessages.POST_COMMENT_ERROR,
+  })
+  public async showComments(@Param('postId') postId: string) {
+    const comments = await this.postService.getComments(postId);
+    return fillDto(CommentRdo, comments);
+  }
+
+  // Удаление комментария
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AppResponseMessage.UNAUTHORIZED,
+  })
+  @Delete('/:postId/comments')
+  public async deleteComment(@Body() dto: DeleteCommentDto) {
+    await this.postService.deleteComment(dto);
   }
 
   // Репост публикации
@@ -189,9 +228,8 @@ export class PostController {
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: postMessages.POST_UNAUTHORIZED,
+    description: AppResponseMessage.UNAUTHORIZED,
   })
-  @UseGuards(JwtAuthGuard)
   @Post('repost/:postId')
   public async repost(
     @Req() { user }: RequestWithUser,

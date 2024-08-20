@@ -31,3 +31,5 @@ export { RabbitRouting } from './lib/enums/rabbit-routing.enum';
 export { JwtToken } from './lib/interfaces/jwt-token.interface';
 export { RefreshTokenPayload } from './lib/interfaces/refresh-token-payload.interface';
 export { RequestWithTokenPayload } from './lib/interfaces/request-with-token-payload.interface';
+
+export { AppResponseMessage } from './lib/enums/app-response-message.enum';

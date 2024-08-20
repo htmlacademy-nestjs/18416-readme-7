@@ -4,3 +4,6 @@ export { CommentEntity } from './comment.entity';
 export { CommentFactory } from './comment.factory';
 export { CommentRepository } from './comment.repository';
 export { CreateCommentDto } from './dto/create-comment.dto';
+export { DeleteCommentDto } from './dto/delete-comment.dto';
+export { CommentQuery } from './comment.query';
+export { CommentWithPaginationRdo } from './rdo/comment-with-pagination.rdo';

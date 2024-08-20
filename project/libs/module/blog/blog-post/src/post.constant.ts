@@ -24,6 +24,9 @@ export enum postMessages {
   POST_ALREADY_REPOSTED = 'This post is already reposted',
   LIKES_ONLY_FOR_PUBLISHED_POSTS = 'Likes are available only for published',
   LIKES_COUNT = 'Likes count',
+  COMMENT_NOT_FOUND = 'Comment was not found',
+  USER_IS_NOT_AUTHOR = 'User is not an author',
+  COMMENTS_FOUND = 'Comments found',
 }
 
 export enum postResponseMessages {

@@ -16,6 +16,7 @@ import {
   CommentFactory,
   CommentRepository,
   CreateCommentDto,
+  DeleteCommentDto,
 } from '@project/comments';
 import {
   CreateLikeDto,
@@ -56,6 +57,25 @@ export class PostService {
     }
   }
 
+  public async deleteComment(dto: DeleteCommentDto): Promise<void> {
+    const existsPost = await this.postRepository.findById(dto.postId);
+    const existsComment = await this.commentRepository.findById(dto.id);
+
+    if (!existsPost) {
+      throw new NotFoundException(postMessages.POST_NOT_FOUND);
+    }
+
+    if (!existsComment) {
+      throw new NotFoundException(postMessages.COMMENT_NOT_FOUND);
+    }
+
+    if (existsComment.userId !== dto.userId) {
+      throw new ForbiddenException(postMessages.USER_IS_NOT_AUTHOR);
+    }
+
+    await this.commentRepository.deleteById(dto.id);
+  }
+
   public async getPost(id: string): Promise<PostEntity> {
     try {
       return this.postRepository.findById(id);
@@ -89,10 +109,21 @@ export class PostService {
     dto: CreateCommentDto
   ): Promise<CommentEntity> {
     const existsPost = await this.postRepository.findById(postId);
+    if (!existsPost) {
+      throw new NotFoundException(`Post with ID ${postId} not found`);
+    }
     const newComment = this.commentFactory.createFromDto(dto, existsPost.id);
     await this.commentRepository.save(newComment);
 
     return newComment;
+  }
+
+  public async getComments(postId: string): Promise<CommentEntity[]> {
+    const existingPost = await this.postRepository.findById(postId);
+    if (!existingPost) {
+      throw new NotFoundException(`Post with ID ${postId} not found`);
+    }
+    return this.commentRepository.findByPostId(existingPost.id);
   }
 
   public async makeRepost(postId: string, userId: string): Promise<PostEntity> {
