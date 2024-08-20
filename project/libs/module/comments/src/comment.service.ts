@@ -5,6 +5,8 @@ import { CommentEntity } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentFactory } from './comment.factory';
+import { CommentQuery } from './comment.query';
+import { PaginationResult } from '@project/shared/core';
 
 @Injectable()
 export class CommentService {
@@ -25,8 +27,11 @@ export class CommentService {
     await this.commentRepository.save(commentEntity);
   }
 
-  public async getComments(postId: string): Promise<CommentEntity[]> {
-    return this.commentRepository.findByPostId(postId);
+  public async getComments(
+    postId: string,
+    query?: CommentQuery
+  ): Promise<PaginationResult<CommentEntity>> {
+    return this.commentRepository.findByPostId(postId, query);
   }
 
   public async deleteComment(id: string): Promise<void> {

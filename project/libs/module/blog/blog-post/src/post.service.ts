@@ -73,6 +73,8 @@ export class PostService {
       throw new ForbiddenException(postMessages.USER_IS_NOT_AUTHOR);
     }
 
+    existsPost.commentsCount -= 1;
+
     await this.commentRepository.deleteById(dto.id);
   }
 
@@ -109,16 +111,22 @@ export class PostService {
     dto: CreateCommentDto
   ): Promise<CommentEntity> {
     const existsPost = await this.postRepository.findById(postId);
+
     if (!existsPost) {
       throw new NotFoundException(`Post with ID ${postId} not found`);
     }
+
+    existsPost.commentsCount += 1;
+
     const newComment = this.commentFactory.createFromDto(dto, existsPost.id);
     await this.commentRepository.save(newComment);
 
     return newComment;
   }
 
-  public async getComments(postId: string): Promise<CommentEntity[]> {
+  public async getComments(
+    postId: string
+  ): Promise<PaginationResult<CommentEntity>> {
     const existingPost = await this.postRepository.findById(postId);
     if (!existingPost) {
       throw new NotFoundException(`Post with ID ${postId} not found`);
