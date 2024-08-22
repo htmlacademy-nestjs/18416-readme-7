@@ -4,8 +4,3 @@ export enum ApplicationServiceURL {
   File = 'http://localhost:3003/api/files',
   FilesStorage = 'FilesStorage',
 }
-
-export enum ApiConstants {
-  HTTP_CLIENT_MAX_REDIRECTS = 5,
-  HTTP_CLIENT_TIMEOUT = 3000,
-}

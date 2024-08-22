@@ -299,4 +299,11 @@ export class PostController {
   ) {
     await this.postService.deleteLike(postId, dto);
   }
+
+  @Get('/:userId/count')
+  public async count(@Param('userId') userId: string) {
+    const count = await this.postService.getCount(userId);
+
+    return count;
+  }
 }

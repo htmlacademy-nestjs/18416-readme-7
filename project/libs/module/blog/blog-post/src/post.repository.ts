@@ -224,4 +224,10 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
 
     return this.createEntityFromDocument(record as Post);
   }
+
+  public async getPostsCountForUser(userId: string) {
+    return this.getPostCount({
+      userId,
+    });
+  }
 }

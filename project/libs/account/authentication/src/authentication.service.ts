@@ -28,6 +28,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { createJWTPayload } from '@project/helpers';
+import { ApplicationServiceURL } from './authentication.enum';
+import { HttpService } from '@nestjs/axios';
+import { NotifyService } from '@project/account-notify';
+
 @Injectable()
 export class AuthenticationService {
   private readonly logger = new Logger(AuthenticationService.name);
@@ -35,6 +39,8 @@ export class AuthenticationService {
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
     private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
+    private readonly notifyService: NotifyService,
 
     @Inject(dbConfig.KEY)
     private readonly databaseConfig: ConfigType<typeof dbConfig>,
@@ -54,7 +60,7 @@ export class AuthenticationService {
       userPassword,
       passwordHash: '',
       role: UserRole.USER,
-      avatar: '',
+      avatarId: '',
     };
 
     const existUser = await this.blogUserRepository.findByEmail(email);
@@ -141,5 +147,81 @@ export class AuthenticationService {
     }
 
     return existUser;
+  }
+
+  public async changeUserPassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ) {
+    const existUser = await this.blogUserRepository.findById(userId);
+    if (!(await existUser.comparePassword(oldPassword))) {
+      throw new UnauthorizedException(
+        AuthenticationResponseStatuses.RESPONSE_WRONG_PASSWORD
+      );
+    }
+
+    const userEntity = await new BlogUserEntity(existUser).setPassword(
+      newPassword
+    );
+
+    this.blogUserRepository.update(userEntity);
+  }
+
+  private async getAvatarPath(fileId: string): Promise<string> {
+    if (!fileId) {
+      return '';
+    }
+
+    const data = await this.getAvatar(fileId);
+
+    return `${'statis'}/${data.subDirectory}/${data.hashName}`;
+  }
+
+  public async registerWithAvatar(dto: CreateUserDto) {
+    const { email, userName, userPassword, avatarId } = dto;
+
+    const blogUser = {
+      email,
+      userName,
+      avatarId,
+      registerDate: null,
+      subscribers: [],
+      passwordHash: '',
+      userPassword: '',
+    };
+
+    const existUser = await this.blogUserRepository.findByEmail(email);
+    if (existUser) {
+      throw new ConflictException(
+        AuthenticationResponseStatuses.RESPONSE_USER_EXIST
+      );
+    }
+
+    const userEntity = await new BlogUserEntity(blogUser).setPassword(
+      userPassword
+    );
+
+    this.blogUserRepository.save(userEntity);
+
+    await this.notifyService.registerSubscriber({
+      id: userEntity.id,
+      email: userEntity.email,
+      userName: userEntity.userName,
+      avatarId: userEntity.avatarId,
+    });
+
+    return {
+      ...userEntity.toPOJO(),
+      avatar: await this.getAvatarPath(userEntity.avatarId),
+    };
+  }
+
+  public async getAvatar(fileId: string) {
+    const { data } = await this.httpService.axiosRef.get(
+      `${ApplicationServiceURL.FilesStorage}/${fileId}`
+    );
+
+    return data;
   }
 }

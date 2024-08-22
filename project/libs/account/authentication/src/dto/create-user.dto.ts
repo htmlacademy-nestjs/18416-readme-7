@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsISO8601, IsString } from 'class-validator';
+import { IsEmail, IsISO8601, IsOptional, IsString } from 'class-validator';
 import { AuthenticationValidateMessages } from '../authentication.enum';
 
 export class CreateUserDto {
@@ -35,9 +35,18 @@ export class CreateUserDto {
   public userPassword: string;
 
   @ApiProperty({
-    example: 'admin',
-    description: 'User role',
+    example: 'Role',
+    description: 'admin',
   })
+  @IsOptional()
   @IsString()
   public role: string;
+
+  @ApiProperty({
+    example: 'Avatar id',
+    description: '323223rweffdsfs',
+  })
+  @IsOptional()
+  @IsString()
+  public avatarId: string;
 }
