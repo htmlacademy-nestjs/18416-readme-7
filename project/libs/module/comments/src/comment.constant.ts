@@ -16,3 +16,11 @@ export const CommentValidationMessages = {
   WrongMinLength: 'Comment Message is too short',
   WrongMaxLength: 'Comment Message is too long',
 } as const;
+
+export enum CommentResponseMessages {
+  COMMENTS_FOUND = 'Comments found',
+}
+
+export enum CommentsParamDescription {
+  POST_ID = 'Post id',
+}

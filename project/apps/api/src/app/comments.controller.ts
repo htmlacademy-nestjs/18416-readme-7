@@ -112,4 +112,19 @@ export class CommentsController {
       }
     );
   }
+
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+  })
+  @Get('/find')
+  public async getCommentsByPostId(
+    @Param('postId') postId: string,
+    @Query() params: any
+  ) {
+    const { data } = await this.httpService.axiosRef.get(
+      `${ApplicationServiceURL.Blog}/${postId}/comments/find`,
+      { params }
+    );
+    return data;
+  }
 }

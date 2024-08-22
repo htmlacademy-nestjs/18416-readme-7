@@ -15,8 +15,11 @@ export class CommentService {
     public readonly commentFactory: CommentFactory
   ) {}
 
-  public async getCommentById(id: string): Promise<CommentEntity> {
-    return this.commentRepository.findById(id);
+  public async getCommentById(
+    id: string,
+    query?: CommentQuery
+  ): Promise<PaginationResult<CommentEntity>> {
+    return this.commentRepository.findByPostId(id, query);
   }
 
   public async createComment(
