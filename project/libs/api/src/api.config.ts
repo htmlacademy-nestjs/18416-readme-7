@@ -3,4 +3,5 @@ export enum ApplicationServiceURL {
   Blog = 'http://localhost:3002/api/posts',
   File = 'http://localhost:3003/api/files',
   FilesStorage = 'FilesStorage',
+  Notify = 'Notify',
 }

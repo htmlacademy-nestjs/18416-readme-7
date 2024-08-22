@@ -230,4 +230,16 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       userId,
     });
   }
+
+  public async findAfterDate(date: Date): Promise<PostEntity[]> {
+    const posts = await this.client.post.findMany({
+      where: {
+        createdAt: { gt: date },
+        publicationStatus: PostStatus.PUBLISHED,
+      },
+      include: { comments: true },
+    });
+
+    return posts.map((post) => this.createEntityFromDocument(post as Post));
+  }
 }

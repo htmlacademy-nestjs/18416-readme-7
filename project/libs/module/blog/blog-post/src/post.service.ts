@@ -198,4 +198,9 @@ export class PostService {
   public async getCount(id: string) {
     return await this.postRepository.getPostsCountForUser(id);
   }
+
+  // Поиск после даты
+  public async findAfterDate(date: Date) {
+    return await this.postRepository.findAfterDate(date);
+  }
 }
