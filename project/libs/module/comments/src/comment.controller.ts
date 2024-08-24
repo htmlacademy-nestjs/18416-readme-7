@@ -8,6 +8,7 @@ import {
   Patch,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 
 import { fillDto } from '@project/helpers';
@@ -18,6 +19,11 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';
 import { CommentQuery } from './comment.query';
 import { CommentWithPaginationRdo } from './rdo/comment-with-pagination.rdo';
+import { ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  CommentResponseMessages,
+  CommentsParamDescription,
+} from './comment.constant';
 
 @Controller('posts/:postId/comments')
 export class CommentController {
@@ -61,5 +67,32 @@ export class CommentController {
   public async update(@Param('id') id: string, @Body() dto: UpdateCommentDto) {
     const updatedComment = await this.commentService.updateComment(id, dto);
     return fillDto(CommentRdo, updatedComment.toPOJO());
+  }
+
+  @ApiResponse({
+    type: CommentWithPaginationRdo,
+    status: HttpStatus.OK,
+    description: CommentResponseMessages.COMMENTS_FOUND,
+  })
+  @ApiParam({
+    name: 'postId',
+    required: true,
+    description: CommentsParamDescription.POST_ID,
+  })
+  @Get('/find')
+  public async getCommentsByPostId(
+    @Param('postId') postId: string,
+    @Query() query: CommentQuery
+  ) {
+    const data = await this.commentService.getCommentById(postId, query);
+
+    const result = {
+      ...data,
+      entities: data.entities.map((comment) =>
+        fillDto(CommentRdo, { ...comment.toPOJO() })
+      ),
+    };
+
+    return fillDto(CommentWithPaginationRdo, result);
   }
 }

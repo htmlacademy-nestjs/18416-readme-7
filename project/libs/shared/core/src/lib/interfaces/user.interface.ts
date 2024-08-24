@@ -7,5 +7,5 @@ export interface User {
   registerDate: Date;
   userAvatar?: string;
   userPassword: string;
-  role: UserRole;
+  role?: UserRole;
 }

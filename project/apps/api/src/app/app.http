@@ -1,5 +1,5 @@
 # Login user by email and password
-POST http://localhost:3003/api/users/login HTTP/1.1
+POST http://localhost:3001/api/users/login HTTP/1.1
 Content-Type: application/json
 
 {
@@ -10,13 +10,13 @@ Content-Type: application/json
 ###
 
 # Get new JWT pair
-POST http://localhost:3003/api/users/refresh HTTP/1.1
+POST http://localhost:3001/api/users/refresh HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoidXNlciIsImxhc3RuYW1lIjoiU21pdGgiLCJmaXJzdG5hbWUiOiJLZWtzIiwidG9rZW5JZCI6IjBiMzk0NDA1LWM0ZTQtNGRmMy04NGNjLTg4ZTI5YTRiOGJkZiIsImlhdCI6MTcxNDY2NDEwOSwiZXhwIjoxNzE3MjU2MTA5fQ.A_-yL6zgW1H6VJbfMzXpQvJnK5flYjpwYOZiCxybnio
 
 ###
 
 # Create a new post
-POST http://localhost:3003/api/blog HTTP/1.1
+POST http://localhost:3002/api/blog HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmIyMWMyZjNiMjUwNGE5MWMzYjkzYzMiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoidXNlciIsInVzZXJOYW1lIjoiS2VrcyIsImlhdCI6MTcyNDA4NjEyNywiZXhwIjoxNzI0MDg2NzI3fQ.96IfnePLFBRqLazsOBHZ_Qk9geqP5jTQlwlzUR_kgWg
 Content-Type: application/json
 
@@ -31,3 +31,182 @@ Content-Type: application/json
   "publicationRepostNumber": 0
 }
 ###
+
+### Register user
+POST http://localhost:3001/api/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "testov@test.com",
+  "userName": "testovich",
+  "password": "1234567",
+  "avatarUrl": "https://15.design.htmlacademy.pro/static/avatar/5.jpg"
+}
+
+### Register with avatar
+POST http://localhost:3001/api/users/register-with-avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="avatar"; filename="/user/myAvatar.jpg"
+Content-Type: image/jpeg
+
+< /user/myAvatar.jpg
+
+--boundary
+Content-Disposition: form-data; name="email"
+
+testov@testsdfsdsdfd.com
+--boundary
+Content-Disposition: form-data; userName="firstname"
+
+Pavel
+--boundary
+Content-Disposition: form-data; name="password"
+
+1234567
+--boundary--
+
+### Token refresh
+POST http://localhost:3001/api/users/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzFmZDdkMjMwMzkyMmI1MWRlNmI0MiIsImVtYWlsIjoiYWxpbmFAZ21haWwuY29tIiwibGFzdG5hbWUiOiJSb3NzIiwiZmlyc3RuYW1lIjoiYWxpbmEiLCJ0b2tlbklkIjoiM2VmMmNhMDYtMmNhNC00NTU0LWJkNzctOTQwM2NlMmQ4MzY2IiwiaWF0IjoxNzI0MzA2ODk4LCJleHAiOjE3MjY4OTg4OTh9.Kf8NSJhqy442kAAaVrxV9XPL7wT39Hzxg4iSWA70AdE
+
+### Password change
+PATCH http://localhost:3001/api/users/change-password HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDI4NThlMjQ0YTI5MTc0ODEzNmExNCIsImVtYWlsIjoidGVzdC11c2VyNTdAbWFpbC5ydSIsIm5hbWUiOiJUZXN0VXNlciIsImlhdCI6MTcxNTYzNjQ3MCwiZXhwIjoxNzE1NzIyODcwfQ.aQaOlTCIDoEUybFnVCtVbTO3J5Xw4JnWzFv_gyTCis4
+Content-Type: application/json
+
+{
+  "oldPassword": "1234567",
+  "newPassword": "7654321"
+}
+
+
+### Get public user info
+GET http://localhost:3002/api/users/6642858e244a291748136a14 HTTP/1.1
+
+###################################################################################
+
+# Get publication list
+GET http://localhost:3002/api/posts HTTP/1.1
+
+###
+
+# Search publication by title
+GET http://localhost:3002/api/posts?title=First HTTP/1.1
+
+###
+
+# Search publication by type
+GET http://localhost:3002/api/posts?type=Text HTTP/1.1
+
+###
+
+# View publication details
+GET http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976541 HTTP/1.1
+
+###
+
+# Create publication
+POST http://localhost:3002/api/posts HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDQwMzJmYmU0Y2FlYjg2OGM2ZWVjMzYiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoidXNlciIsImxhc3RuYW1lIjoiU21pdGgiLCJmaXJzdG5hbWUiOiJLZWtzIiwiaWF0IjoxNjgzMTI0MTA5LCJleHAiOjE2ODMxMjQ3MDl9.oHiIvy7hGEuDaI7e7Jspbcd68_5CMKNe2qzkMV6bDe8
+Content-Type: application/json
+
+{
+  "title": "Hello world 123",
+  "type": "Text",
+  "status": "Draft",
+  "tags": ["test_tag"],
+  "name": "sdkjsdjgldjgdlj",
+  "annoncement": "dto.annoncement",
+  "text": "dto.text"
+}
+
+
+### Like
+PATCH  http://localhost:3002/api/posts/like/6d308040-06a2-4162-bea6-2398e9976540 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MDgwMzY1LCJleHAiOjE3MjQxNjY3NjV9.qZzB1QJCpq21LbTn0R4ReaxQyosFRweMOKpRVtB-too
+
+
+### Repost publication
+POST http://localhost:3002/api/posts/repost/6d308040-06a2-4162-bea6-2398e9976540 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MDgwMzY1LCJleHAiOjE3MjQxNjY3NjV9.qZzB1QJCpq21LbTn0R4ReaxQyosFRweMOKpRVtB-too
+Content-Type: application/json
+
+
+### Delete publication
+DELETE http://localhost:3002/api/posts/0549e0e7-ad8c-43b8-aa35-507ba547d743 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MDgwMzY1LCJleHAiOjE3MjQxNjY3NjV9.qZzB1QJCpq21LbTn0R4ReaxQyosFRweMOKpRVtB-too
+
+
+### Update publication
+PATCH http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976540 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MDgwMzY1LCJleHAiOjE3MjQxNjY3NjV9.qZzB1QJCpq21LbTn0R4ReaxQyosFRweMOKpRVtB-too
+Content-Type: application/json
+
+{
+  "title": "Hello world update1",
+  "tags": ["update_tag"]
+}
+
+### Get draft publications
+GET http://localhost:3002/api/posts/draft HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MDgwMzY1LCJleHAiOjE3MjQxNjY3NjV9.qZzB1QJCpq21LbTn0R4ReaxQyosFRweMOKpRVtB-too
+
+
+### Get publication list for user
+GET http://localhost:3002/api/posts/user/663b6d0bf48517d912b1b267 HTTP/1.1
+
+
+### Создание поста с загрузкой изображения
+POST http://localhost:3002/api/posts HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDI4NThlMjQ0YTI5MTc0ODEzNmExNCIsImVtYWlsIjoidGVzdC11c2VyNTdAbWFpbC5ydSIsIm5hbWUiOiJUZXN0VXNlciIsImlhdCI6MTcxNTYzNjQ3MCwiZXhwIjoxNzE1NzIyODcwfQ.aQaOlTCIDoEUybFnVCtVbTO3J5Xw4JnWzFv_gyTCis4
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="photo"; filename="/user/photo.jpg"
+Content-Type: image/jpeg
+
+< /user/photo.jpg
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Photo Post
+--boundary
+Content-Disposition: form-data; name="type"
+
+Photo
+--boundary
+Content-Disposition: form-data; name="status"
+
+Draft
+--boundary--
+
+
+### Create comment
+POST http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976541/comments HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJjYzQ3OGQ5MzQxZjYyNGNkNDgzMSIsImVtYWlsIjoibWFya0BnbWFpbC5jb20iLCJsYXN0bmFtZSI6IlJvc3MiLCJmaXJzdG5hbWUiOiJtYXJrIiwiaWF0IjoxNzI0MjMxMDQ1LCJleHAiOjE3MjQzMTc0NDV9.GvJphEv2vobtAo0116fpIKJ6LAR5h5-rPhCgUz2Wi5I
+Content-Type: application/json
+
+{
+  "message": "Test comment"
+}
+
+
+### Delete comment
+DELETE http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976541/comments/1aeb3bca-ab71-4a3d-aec5-97f64784069c HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDBiNTBjMzNmODExMTE3MWRjZWI1NyIsImVtYWlsIjoidGVzdC11c2VyNUBtYWlsLnJ1IiwibmFtZSI6Ik5ld1VzZXIiLCJpYXQiOjE3MTU1MTg0MzMsImV4cCI6MTcxNTYwNDgzM30.SR8-Tat6isf7m1h890c0udIMGxcfJ6kkspZLmfq0CdM
+
+
+### Get all comments for post
+GET http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976541/comments/find HTTP/1.1
+
+
+### Get comment with ID
+GET http://localhost:3002/api/posts/6d308040-06a2-4162-bea6-2398e9976541/comments/1aeb3bca-ab71-4a3d-aec5-97f64784069c HTTP/1.1
+
+
+### Notify for users
+GET http://localhost:3004/api/notify/new-posts-appeared HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDI4NThlMjQ0YTI5MTc0ODEzNmExNCIsImVtYWlsIjoidGVzdC11c2VyNTdAbWFpbC5ydSIsIm5hbWUiOiJUZXN0VXNlciIsImlhdCI6MTcxNTYzNjQ3MCwiZXhwIjoxNzE1NzIyODcwfQ.aQaOlTCIDoEUybFnVCtVbTO3J5Xw4JnWzFv_gyTCis4

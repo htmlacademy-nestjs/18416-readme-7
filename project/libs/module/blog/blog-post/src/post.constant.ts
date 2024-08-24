@@ -29,6 +29,10 @@ export enum postMessages {
   COMMENTS_FOUND = 'Comments found',
 }
 
+export enum postDescription {
+  POST_LAST_DATE = 'Last date',
+}
+
 export enum postResponseMessages {
   POST_LIKE_NOT_FOUND = 'Like was not found',
   POST_IS_NOT_PUBLISHED = 'Post is not published',

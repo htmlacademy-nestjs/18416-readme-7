@@ -7,3 +7,4 @@ export { default as rabbitConfig } from './configurations/rabbit.config';
 export { getJwtOptions } from './get-jwt-options';
 
 export { getMongooseOptions } from './configurations/mongodb/get-mongoose-options';
+export { ApplicationServiceURL } from './configurations/config.constant';

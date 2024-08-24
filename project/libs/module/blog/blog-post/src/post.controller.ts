@@ -25,8 +25,9 @@ import {
   CreateCommentDto,
   DeleteCommentDto,
 } from '@project/comments';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiQuery, ApiResponse } from '@nestjs/swagger';
 import {
+  postDescription,
   postMessages,
   postParams,
   postResponseMessages,
@@ -298,5 +299,30 @@ export class PostController {
     @Body() dto: CreateLikeDto
   ) {
     await this.postService.deleteLike(postId, dto);
+  }
+
+  @Get('/:userId/count')
+  public async count(@Param('userId') userId: string) {
+    const count = await this.postService.getCount(userId);
+
+    return count;
+  }
+
+  // Поиск по дате
+  @ApiResponse({
+    type: [PostRdo],
+    status: HttpStatus.OK,
+    description: postMessages.POST_FOUND,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: postMessages.USER_IS_NOT_AUTHOR,
+  })
+  @ApiQuery({ type: 'date', description: postDescription.POST_LAST_DATE })
+  @Get('/find-after-date')
+  public async findAfterDate(@Query('date') date: Date) {
+    const posts = await this.postService.findAfterDate(date);
+
+    return posts.map((post) => fillDto(PostRdo, post.toPOJO()));
   }
 }

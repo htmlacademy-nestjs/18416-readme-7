@@ -193,4 +193,14 @@ export class PostService {
     existsPost.likesCount -= 1;
     await this.postRepository.update(existsPost);
   }
+
+  // Подсчитываем список постов для пользователя
+  public async getCount(id: string) {
+    return await this.postRepository.getPostsCountForUser(id);
+  }
+
+  // Поиск после даты
+  public async findAfterDate(date: Date) {
+    return await this.postRepository.findAfterDate(date);
+  }
 }

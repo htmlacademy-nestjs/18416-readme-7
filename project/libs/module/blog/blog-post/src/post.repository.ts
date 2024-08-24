@@ -224,4 +224,22 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
 
     return this.createEntityFromDocument(record as Post);
   }
+
+  public async getPostsCountForUser(userId: string) {
+    return this.getPostCount({
+      userId,
+    });
+  }
+
+  public async findAfterDate(date: Date): Promise<PostEntity[]> {
+    const posts = await this.client.post.findMany({
+      where: {
+        createdAt: { gt: date },
+        publicationStatus: PostStatus.PUBLISHED,
+      },
+      include: { comments: true },
+    });
+
+    return posts.map((post) => this.createEntityFromDocument(post as Post));
+  }
 }
