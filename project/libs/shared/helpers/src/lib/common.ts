@@ -1,8 +1,6 @@
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
-import { ApplicationServiceURL } from '@project/api-config';
 export type DateTimeUnit = 's' | 'h' | 'd' | 'm' | 'y';
 export type TimeAndUnit = { value: number; unit: DateTimeUnit };
-import { HttpService } from '@nestjs/axios';
 import 'Express';
 
 export function fillDto<T, V>(

@@ -84,7 +84,7 @@ export class CommentController {
     @Param('postId') postId: string,
     @Query() query: CommentQuery
   ) {
-    const data = await this.commentService.getCommentById(postId, query);
+    const data = await this.commentService.getComments(postId, query);
 
     const result = {
       ...data,

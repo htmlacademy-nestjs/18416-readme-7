@@ -18,7 +18,7 @@ export class CommentService {
   public async getCommentById(
     id: string,
     query?: CommentQuery
-  ): Promise<PaginationResult<CommentEntity>> {
+  ): Promise<CommentEntity> {
     return this.commentRepository.findByPostId(id, query);
   }
 

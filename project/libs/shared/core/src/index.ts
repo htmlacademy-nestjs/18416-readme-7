@@ -33,3 +33,5 @@ export { RefreshTokenPayload } from './lib/interfaces/refresh-token-payload.inte
 export { RequestWithTokenPayload } from './lib/interfaces/request-with-token-payload.interface';
 
 export { AppResponseMessage } from './lib/enums/app-response-message.enum';
+
+export { GLOBAL_API_PREFIX } from './lib/constants/application.const';

@@ -1,11 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Post,
-  EntityFactory,
-  PostStatus,
-  Tag,
-  Like,
-} from '@project/shared/core';
+import { Post, EntityFactory, PostStatus } from '@project/shared/core';
 import { PostEntity } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 
