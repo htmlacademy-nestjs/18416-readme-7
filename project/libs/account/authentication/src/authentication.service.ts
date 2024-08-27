@@ -10,8 +10,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { ConfigService, ConfigType } from '@nestjs/config';
-
 import { dbConfig, jwtConfig } from '@project/account-config';
 
 import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
@@ -38,15 +36,12 @@ export class AuthenticationService {
 
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
-    private readonly configService: ConfigService,
     private readonly httpService: HttpService,
     private readonly notifyService: NotifyService,
 
     @Inject(dbConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof dbConfig>,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
-    private readonly jwtOptions: ConfigType<typeof jwtConfig>,
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 

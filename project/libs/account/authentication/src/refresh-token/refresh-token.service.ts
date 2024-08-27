@@ -1,8 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 
-import { jwtConfig } from '@project/account-config';
 import { RefreshTokenPayload } from '@project/shared/core';
 import { parseTime } from '@project/helpers';
 
@@ -13,9 +11,7 @@ import { RefreshTokenParams } from '../authentication.enum';
 @Injectable()
 export class RefreshTokenService {
   constructor(
-    private readonly refreshTokenRepository: RefreshTokenRepository,
-    @Inject(jwtConfig.KEY)
-    private readonly jwtOptions: ConfigType<typeof jwtConfig>
+    private readonly refreshTokenRepository: RefreshTokenRepository
   ) {}
 
   public async createRefreshSession(payload: RefreshTokenPayload) {
